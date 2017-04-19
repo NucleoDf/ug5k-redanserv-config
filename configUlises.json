@@ -3,25 +3,28 @@
     "HistoricsDeep": 30,
     "LoginTimeOut": 0,
     "Region": "Región Centro",
-    "BackupServiceDomain": "localhost:8082",
-    "Version": "V 9.0",
-    "SubVersion": "Beta 2",
+    "BackupServiceDomain": "192.168.0.212:8082",
+    "Version": "1.0",
+    "SubVersion": "",
     "Date": "03/02/2017",
     "NodeJS": "v6.9.5",
     "MySQL": "5.7.17",
     "Files": [
-      {
-        "Name": "app.js",
-        "Path": "/"
-      },
-      {
-        "Name": "package.json",
-        "Path": "/"
-      },
-      {
-        "Name": "configUlises.json",
-        "Path": "/"
-      }
+      {"Name": "configUlises.json","Path": "/" },
+      {"Name": "app.js", "Path": "/" },
+      {"Path": "/lib/", "Name": "authentication.js"},
+      {"Path": "/lib/", "Name": "configurations.js"},
+      {"Path": "/lib/", "Name": "gateways.js"},
+      {"Path": "/lib/", "Name": "hardware.js"},
+      {"Path": "/lib/", "Name": "historics.js"},
+      {"Path": "/lib/", "Name": "loggingDate.js"},
+      {"Path": "/lib/", "Name": "radioDestinations.js"},
+      {"Path": "/lib/", "Name": "resources.js"},
+      {"Path": "/lib/", "Name": "services.js"},
+      {"Path": "/lib/", "Name": "sites.js"},
+      {"Path": "/lib/", "Name": "tableBss.js"},
+      {"Path": "/lib/", "Name": "users.js"},
+      {"Path": "/lib/", "Name": "version.js"}
     ]
   }
 }
