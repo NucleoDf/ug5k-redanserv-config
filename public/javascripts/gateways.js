@@ -20,7 +20,10 @@ var ChangeGateWaySite = function(data){
 			$.ajax({type: 'POST',
 				url: '/gateways/changesite/'+idCgw+'/'+newIndex,
 				success: function(data){
-					alertify.success('La pasarela ha sido cambiada de emplazamiento.');
+					if(data.data == 'DUP_ENTRY_NAME')
+						alertify.error('Ya existe una pasarela con el mismo nombre en el emplazamiento de destino seleccionado.');
+					else
+						alertify.success('La pasarela ha sido cambiada de emplazamiento.');
 					ShowSite($('#IdSite').val(),$('#IdSite').data('idSite'));
 				},
 				error: function(data){
