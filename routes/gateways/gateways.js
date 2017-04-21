@@ -24,6 +24,14 @@ router.route('/')	// The root path is relative the path where it's mounted in ap
   		myLibGateways.getGateways(req, res);
 	});
 
+router.route('/checkipaddr/:ip')
+	.get(function(req,res){
+		logging.LoggingDate(req.method + ': ' + req.baseUrl + req.url);
+		myLibGateways.getGatewaysIpInConfig(req.params.ip,function(gtw){
+			res.json(gtw.data);
+		});
+	});
+
 router.route('/activeCfg')
 	.get(function(req,res){
 		logging.LoggingDate(req.method + ': ' + req.baseUrl + req.url);
