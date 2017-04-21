@@ -5,15 +5,15 @@ if "" == "%1" goto errorInstallation
 :menu
 cls
 echo ****************************************************************
-echo **** Utilidad de instalación y actualización Ulises 5000-G  ****
+echo **** Utilidad de instalacion y actualizacion Ulises 5000-G  ****
 echo ****************************************************************
 echo.
 echo.
-echo Seleccione la opción
-echo Actualización				(A)
-echo Instalación				(I)
-echo Crear tabla incidencias 	(C)
-echo Salir						(S)
+echo Seleccione la opcion
+echo 	A: Actualizacion
+echo 	I: Instalacion
+echo 	C: Crear tabla incidencias 
+echo		S: Salir
 echo.
 choice /C AICS /M "Pulse (A), (I), (C) o (S)" 
 SET opcion=%errorlevel%
@@ -25,10 +25,12 @@ if errorlevel 1 goto update-ug5k
 goto menu
 
 :install-ug5k
-md %1\.idea
-xcopy .\bin %1\bin /SY
+md %1
 
 md %1\bin
+xcopy .\bin %1\bin /SY
+
+md %1\.idea
 xcopy .\.idea %1\.idea /SY
 
 md %1\node_modules
@@ -37,16 +39,16 @@ xcopy .\node_modules %1\node_modules /SY
 md %1\routes
 xcopy .\routes %1\routes /SY
 
-md lib
+md %1\lib
 xcopy  .\lib %1\lib /SY
 
-md views
+md %1\views
 xcopy .\views %1\views /SY
 
-md data_model
+md %1\data_model
 xcopy .\data_model %1\data_model /SY
 
-md public
+md %1\public
 xcopy .\public %1\public /SY
 
 copy *.json %1
@@ -60,13 +62,13 @@ goto installService
 md %1\routes
 xcopy .\routes %1\routes /SY
 
-md lib
+md %1\lib
 xcopy  .\lib %1\lib /SY
 
-md views
+md %1\views
 xcopy .\views %1\views /SY
 
-md data_model
+md %1\data_model
 xcopy .\data_model %1\data_model /SY
 
 
@@ -94,24 +96,33 @@ goto installService
 :installService
 cls
 echo *************************************************
-echo **** Crear servicio Ulises G5000  (64 bits) ****
+echo **** Crear servicio Ulises G5000  (32/64 bits) ****
 echo *************************************************
 echo.
 echo.
-choice /C SN /M "¿Quiere crear el servicio Ulises G5000? (S)í (N)o" 
+choice /C SN /M "Crear el servicio Ulises G5000 ? (S)i (N)o" 
 SET instala=%errorlevel%
 if errorlevel 2 goto fin
 if errorlevel 1 goto instala-service
 goto installService
 
 :instala-service
-".\nss\win64\nssm.exe" install Ulises-G5000
+reg Query "HKLM\Hardware\Description\System\CentralProcessor\0" | find /i "x86" > NUL && set OS=32BIT || set OS=64BIT
+if %OS%==32BIT echo This is a 32bit operating system
+if %OS%==64BIT echo This is a 64bit operating system
+
+if %OS%==32BIT copy .\nss\win32\nssm.exe %1
+if %OS%==64BIT copy .\nss\win64\nssm.exe %1
+
+%1\nssm.exe install Ulises-G5000
+
 goto fin
 
 :install-incidencias
-"C:\Program Files\MySQL\MySQL Server 5.6\bin\mysql.exe" --host=localhost --user=root --password="U5K-G"  < "C:\\UG5K-Serv\\data_model\\BD_UG5K_New_Installation.sql"
+rem "C:\Program Files\MySQL\MySQL Server 5.6\bin\mysql.exe" --host=localhost --user=root --password="U5K-G"  < "C:\\UG5K-Serv\\data_model\\BD_UG5K_New_Installation.sql"
+mysql.exe --host=localhost --user=root --password="U5K-G"  <  %1\data_model\BD_UG5K_New_Installation.sql
 
-@echo "Actualización de las tablas de incidencias finalizada."
+@echo "Actualizacion de las tablas de incidencias finalizada."
 pause
 goto fin
 
