@@ -210,6 +210,22 @@ script.
 			if ($(element).val()!='' && matchIp == null){
 				Fade(element,label)
 			}
+			if($(element).val()!=element.oldValue) {
+				$.ajax({
+					type: 'GET',
+					//url: '/gateways/' + $('#Component').text() + '/services/' + serviceId,
+					url: '/gateways/checkipaddr/' + $(element).val() + '/' + $('#DivConfigurations').data('idCFG') + '/' + $('#DivGateways').data('idCgw'),
+					success: function (data) {
+						if (data == "IP_DUP" && (element.name == 'ipb1' || element.name == 'ipb2')) {
+							alertify.error('La dirección ip: ' + $(element).val() + ' ya se encuentra dada de alta en esta configuración.');
+							$(element).val(element.oldValue);
+						}
+					},
+					error: function (data) {
+						alertify.error('Error al comprobar las direcciones ip existentes en el sistema.');
+					}
+				});
+			}
 		}
 
 		function ValidateVAD(element,label){
@@ -218,8 +234,6 @@ script.
 			if ($(element).val()!='' && ($(element).val().match(regex) == null ||
 				(Number($(element).val()) < -35 || Number($(element).val()) >-15)))
 				Fade(element,label);
-
-
 		}
 
 		function ValidateInternalDelay(element,label){

@@ -14,27 +14,58 @@ var ChangeGateWaySite = function(data){
 	var oldIndex = data[data.oldValue].value;
 	var newIndex = data[data.selectedIndex].value;
 	var idCgw = $('#DivGateways').data('idCgw');
-	alertify.confirm('Ulises G 5000 R', "¿Quiere cambiar la pasarela del emplazamiento \"" + data[data.oldValue].outerText +
-		"\" al emplazamiento \"" + data[data.selectedIndex].outerText + "\"?",
-		function(){
-			$.ajax({type: 'POST',
-				url: '/gateways/changesite/'+idCgw+'/'+newIndex,
-				success: function(data){
-					if(data.data == 'DUP_ENTRY_NAME')
-						alertify.error('Ya existe una pasarela con el mismo nombre en el emplazamiento de destino seleccionado.');
-					else
-						alertify.success('La pasarela ha sido cambiada de emplazamiento.');
-					ShowSite($('#IdSite').val(),$('#IdSite').data('idSite'));
-				},
-				error: function(data){
-					alertify.error('Error en la operacion');
-				}
-			});
-			//alertify.success('Ok');
-		},
-		function(){ alertify.error('Cancelado');}
-	);
+ 	var oldEmpl = data[data.oldValue].outerText;
+	var newEmpl = data[data.selectedIndex].outerText;
+	var ipb1 = '';
+	if($('#ipb1')['0'].oldValue == null)
+		ipb1 = $('#ipb1').val();
+	else
+		ipb1 = $('#ipb1')['0'].oldValue;
 	
+	var ipb2 = '';
+	if($('#ipb2')['0'].oldValue == null)
+		ipb2 = $('#ipb2').val();
+	else
+		ipb2 = $('#ipb2')['0'].oldValue;
+	
+	$.ajax({
+		type: 'GET',
+		//url: '/gateways/' + $('#Component').text() + '/services/' + serviceId,
+		url: '/gateways/checkipaddr4changesite/' + ipb1 + '/' + ipb2 + '/' + newIndex,
+		success: function (data) {
+			if (data == "IP_DUP_1" ) {
+				alertify.error('La dirección ip: ' + ipb1 + ' ya se encuentra dada de alta en la configuración de destino.');
+			}
+			else if (data == "IP_DUP_2" ) {
+					alertify.error('La dirección ip: ' + ipb2 + ' ya se encuentra dada de alta en la configuración de destino.');
+			}
+			else {
+				alertify.confirm('Ulises G 5000 R', "¿Quiere cambiar la pasarela del emplazamiento \"" + oldEmpl +
+					"\" al emplazamiento \"" + newEmpl + "\"?",
+					function(){
+						$.ajax({type: 'POST',
+							url: '/gateways/changesite/'+idCgw+'/'+newIndex,
+							success: function(data){
+								if(data.data == 'DUP_ENTRY_NAME')
+									alertify.error('Ya existe una pasarela con el mismo nombre en el emplazamiento de destino seleccionado.');
+								else
+									alertify.success('La pasarela ha sido cambiada de emplazamiento.');
+								ShowSite($('#IdSite').val(),$('#IdSite').data('idSite'));
+							},
+							error: function(data){
+								alertify.error('Error en la operacion');
+							}
+						});
+						//alertify.success('Ok');
+					},
+					function(){ alertify.error('Cancelado');}
+				);
+			}
+		},
+		error: function (data) {
+			alertify.error('Error al comprobar las direcciones ip existentes en el sistema.');
+		}
+	});
 };
 
 var DelGateway = function(){
