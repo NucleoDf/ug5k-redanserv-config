@@ -44,7 +44,7 @@ var ChangeGateWaySite = function(data){
 					"\" al emplazamiento \"" + newEmpl + "\"?",
 					function(){
 						$.ajax({type: 'POST',
-							url: '/gateways/changesite/'+idCgw+'/'+newIndex,
+							url: '/gateways/changesite/'+idCgw+'/'+oldIndex+'/'+newIndex,
 							success: function(data){
 								if(data.data == 'DUP_ENTRY_NAME')
 									alertify.error('Ya existe una pasarela con el mismo nombre en el emplazamiento de destino seleccionado.');

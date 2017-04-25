@@ -65,10 +65,10 @@ router.route('/activeCfg/:gtw')
 		});
 	});
 
-router.route('/changesite/:gateway/:idSite')
+router.route('/changesite/:gateway/:idOldSite/:idNewSite')
 	.post(function(req,res){
 		logging.LoggingDate('POST /changesite/:' + req.params.gateway + '/:' + req.params.idSite);
-		myLibGateways.changeGateWaySite(req.params.gateway,req.params.idSite,function(result){
+		myLibGateways.changeGateWaySite(req.params.gateway,req.params.idOldSite,req.params.idNewSite,function(result){
 			res.json(result);
 		});
 	});
