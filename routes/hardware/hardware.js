@@ -26,6 +26,14 @@ router.route('/site/:siteId')
   		});
 	});
 
+router.route('/checkresname/:name/:idCfg')
+	.get(function(req,res){
+		logging.LoggingDate(req.method + ': ' + req.baseUrl + req.url);
+		myLibHardware.getResNamesInConfig(req.params.name,req.params.idCfg, function(hardware){
+			res.json(hardware.error);
+		});
+	});
+
 /**********************************/
 /*  Routes relating to positions  */
 /**********************************/

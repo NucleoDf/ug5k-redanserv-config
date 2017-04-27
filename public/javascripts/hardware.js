@@ -1139,7 +1139,22 @@ function AddResource(slaveId, col, fila, f){
 	
 	// Permitir dar de alta recursos solo si tiene un identificador
 	// y tiene asignada una frecuencia si es de tipo radio.
+	
 	if ($('#TbNameResource').val().length > 0){
+		/*$.ajax({
+			type: 'GET',
+			//url: '/gateways/' + $('#Component').text() + '/services/' + serviceId,
+			url: '/hardware/checkresname/' + $('#TbNameResource').val() + '/' + $('#DivConfigurations').data('idCFG'),
+			success: function (data) {
+				if (data == "IP_DUP_1") {
+					alertify.error('La dirección ip: ' + ipb1 + ' ya se encuentra dada de alta en la configuración de destino.');
+				}
+			},
+			error: function (data) {
+				alertify.error('Error al comprobar el nombre del recurso en el sistema.');
+			}
+		});
+		*/
 		if((($('#SResourceType option:selected').val() != 1) || $('#IdDestination').val() != '')){
 			// Comprobar si la slave existe
 			if (idSlave == ''){
