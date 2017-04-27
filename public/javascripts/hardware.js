@@ -1686,18 +1686,23 @@ function ShowRadioParamsOfResource(data){
 
 
 			// Panel comunicaciones
-			switch (data.parametros.radio.tipo){
+			switch (data.parametros.radio.tipo) {
 				case 0: // Local simple
 					// Ocultar TX-B y RX-B para locales simple
-					$('#TxBRow').attr('style','display:table-column');	
-					$('#RxBRow').attr('style','display:table-column');
+					$('#TxBRow').attr('style', 'display:table-column');
+					$('#RxBRow').attr('style', 'display:table-column');
 					// Ocultar boton añadir emplazamiento
-					if( ($('#UriTxA')[0].value == null) || ($('#UriTxA')[0].value == '') &&
-						($('#UriRxA')[0].value == null) || ($('#UriRxA')[0].value == '') )
+					if (($('#UriTxA')[0].value == null) || ($('#UriTxA')[0].value == '') &&
+						($('#UriRxA')[0].value == null) || ($('#UriRxA')[0].value == ''))
 						$('#ListMenuSites li:first-child').find("a").text('+');
-					else
-						('#ListMenuSites li:first-child').find("a").text('Colateral');
-					
+					else {
+						try {
+							('#ListMenuSites li:first-child').find("a").text('Colateral');
+						}
+						catch (err) {
+							alertify.error("Error: "+err.message);
+						}
+					}
 					break;
 				case 1:
 					$('#ListMenuSites li:first-child').find("a").text('Colateral');
@@ -1869,34 +1874,36 @@ function ShowRangeAts(data){
 			var clase = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='New NotAllowedTd'" : "";
 			var clase_a = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='ButtonNucleo NotAllowedBtn'" : "class='ButtonNucleo'";
 			var clase_ = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='NotAllowedBtn'" : "";
-			$.each(data.ranks,function(index,value){
-				if (value.origen){
-					indexOrigen++;
-					$('#rangeAtsOrigin tr:last').before('<tr data-idrango=' + value.idRANGOS + ' style="height:45px">' +
-														'<td align="center"' + clase + '><input ' + clase_ + ' value="' + value.inicial + '" style="width:55px;text-align: right"/></td>' + 
-														'<td align="center"' + clase + '><input ' + clase_ + ' value="' + value.final + '" style="width:55px;text-align: right"/></td>' +
-														'<td align="center"' + clase + '><a ' + clase_a +' onclick="UpdateRank(' + indexOrigen + ',true)" >' + actualiza + '</a></td>' +
-														'<td align="center"' + clase + '><a ' + clase_a +' onclick="RemoveRank(' + indexOrigen + ',true)" >' + remove + '</a></td>' +
-														'</tr>');
-					if ($('#rangeAtsOrigin')[0].childNodes["0"].childNodes.length == 6)
-						$('#AddOrigenRow').hide();
-					else
-						$('#AddOrigenRow').show();
-				}
-				else{
-					indexDestino++;
-					$('#rangeAtsDestination tr:last').before('<tr data-idrango=' + value.idRANGOS + ' style="height:45px">' +
-															'<td align="center"' + clase + '><input ' + clase_ + ' value="' + value.inicial + '" style="width:55px;text-align: right"/></td>' + 
-															'<td align="center"' + clase + '><input ' + clase_ + ' value="' + value.final + '" style="width:55px;text-align: right"/></td>' +
-															'<td align="center"' + clase + '><a ' + clase_a +' onclick="UpdateRank(' + indexDestino + ',false)" >' + actualiza + '</a></td>' +
-															'<td align="center"' + clase + '><a ' + clase_a +' onclick="RemoveRank(' + indexDestino + ',false)" >' + remove + '</a></td>' +
-															'</tr>');
-					if ($('#rangeAtsDestination')[0].childNodes["0"].childNodes.length == 6)
-						$('#AddDestinoRow').hide();
-					else
-						$('#AddDestinoRow').show();
-				}
-			});
+			if(data!='NO_DATA') {
+				$.each(data.ranks, function (index, value) {
+					if (value.origen) {
+						indexOrigen++;
+						$('#rangeAtsOrigin tr:last').before('<tr data-idrango=' + value.idRANGOS + ' style="height:45px">' +
+							'<td align="center"' + clase + '><input ' + clase_ + ' value="' + value.inicial + '" style="width:55px;text-align: right"/></td>' +
+							'<td align="center"' + clase + '><input ' + clase_ + ' value="' + value.final + '" style="width:55px;text-align: right"/></td>' +
+							'<td align="center"' + clase + '><a ' + clase_a + ' onclick="UpdateRank(' + indexOrigen + ',true)" >' + actualiza + '</a></td>' +
+							'<td align="center"' + clase + '><a ' + clase_a + ' onclick="RemoveRank(' + indexOrigen + ',true)" >' + remove + '</a></td>' +
+							'</tr>');
+						if ($('#rangeAtsOrigin')[0].childNodes["0"].childNodes.length == 6)
+							$('#AddOrigenRow').hide();
+						else
+							$('#AddOrigenRow').show();
+					}
+					else {
+						indexDestino++;
+						$('#rangeAtsDestination tr:last').before('<tr data-idrango=' + value.idRANGOS + ' style="height:45px">' +
+							'<td align="center"' + clase + '><input ' + clase_ + ' value="' + value.inicial + '" style="width:55px;text-align: right"/></td>' +
+							'<td align="center"' + clase + '><input ' + clase_ + ' value="' + value.final + '" style="width:55px;text-align: right"/></td>' +
+							'<td align="center"' + clase + '><a ' + clase_a + ' onclick="UpdateRank(' + indexDestino + ',false)" >' + actualiza + '</a></td>' +
+							'<td align="center"' + clase + '><a ' + clase_a + ' onclick="RemoveRank(' + indexDestino + ',false)" >' + remove + '</a></td>' +
+							'</tr>');
+						if ($('#rangeAtsDestination')[0].childNodes["0"].childNodes.length == 6)
+							$('#AddDestinoRow').hide();
+						else
+							$('#AddDestinoRow').show();
+					}
+				});
+			}
 		});
 	});
 }
