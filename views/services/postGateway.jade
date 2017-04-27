@@ -210,21 +210,23 @@ script.
 			if ($(element).val()!='' && matchIp == null){
 				Fade(element,label)
 			}
-			if($(element).val()!=element.oldValue) {
-				$.ajax({
-					type: 'GET',
-					//url: '/gateways/' + $('#Component').text() + '/services/' + serviceId,
-					url: '/gateways/checkipaddr/' + $(element).val() + '/' + $('#DivConfigurations').data('idCFG') + '/' + $('#DivGateways').data('idCgw'),
-					success: function (data) {
-						if (data == "IP_DUP" && (element.name == 'ipb1' || element.name == 'ipb2')) {
-							alertify.error('La dirección ip: ' + $(element).val() + ' ya se encuentra dada de alta en esta configuración.');
-							$(element).val(element.oldValue);
+			else {
+				if ($(element).val() != element.oldValue && (element.id == 'ipb1' || element.id == 'ipb2')) {
+					$.ajax({
+						type: 'GET',
+						//url: '/gateways/' + $('#Component').text() + '/services/' + serviceId,
+						url: '/gateways/checkipaddr/' + $(element).val() + '/' + $('#DivConfigurations').data('idCFG') + '/' + $('#DivGateways').data('idCgw'),
+						success: function (data) {
+							if (data == "IP_DUP" && (element.name == 'ipb1' || element.name == 'ipb2')) {
+								alertify.error('La dirección ip: ' + $(element).val() + ' ya se encuentra dada de alta en esta configuración.');
+								$(element).val(element.oldValue);
+							}
+						},
+						error: function (data) {
+							alertify.error('Error al comprobar las direcciones ip existentes en el sistema.');
 						}
-					},
-					error: function (data) {
-						alertify.error('Error al comprobar las direcciones ip existentes en el sistema.');
-					}
-				});
+					});
+				}
 			}
 		}
 
@@ -391,7 +393,6 @@ script.
 				Fade(element,label)
 			}
 		}
-
 
 div(id="FormGateway", style="display: none; width: 350px")
 	div.menu.fadeNucleo#DivGateways(style="position:relative")
