@@ -1141,176 +1141,179 @@ function AddResource(slaveId, col, fila, f){
 	// y tiene asignada una frecuencia si es de tipo radio.
 	
 	if ($('#TbNameResource').val().length > 0){
-		/*$.ajax({
+		$.ajax({
 			type: 'GET',
 			//url: '/gateways/' + $('#Component').text() + '/services/' + serviceId,
-			url: '/hardware/checkresname/' + $('#TbNameResource').val() + '/' + $('#DivConfigurations').data('idCFG'),
+			url: '/hardware/checkresname/' + $('#TbNameResource').val() + '/' + $('#DivGateways').data('idCgw'),
 			success: function (data) {
-				if (data == "IP_DUP_1") {
-					alertify.error('La dirección ip: ' + ipb1 + ' ya se encuentra dada de alta en la configuración de destino.');
+				if (data == "NAME_DUP") {
+					alertify.error('El nombre del recurso ' + $('#TbNameResource').val() +
+									' ya se encuentra dada de alta en la pasarela. Utilize otro nombre.');
+				}
+				else {
+					if((($('#SResourceType option:selected').val() != 1) || $('#IdDestination').val() != '')){
+						// Comprobar si la slave existe
+						if (idSlave == ''){
+							////////////////////////
+							// La slave no existe //
+							////////////////////////
+							AddSlave($('#IdSite').data('gatewayName'),col,function(data){
+								idSlave = data;
+								$.ajax({type: 'POST',
+									dataType: 'json',
+									contentType:'application/json',
+									url: '/hardware/' + idSlave + '/resources/resource',
+									data: JSON.stringify({
+										POS_idPOS: fila,	// Ahora se pone la posición dentro de la slave, en la bd va el id del registro POS generado
+										name: $('#TbNameResource').val(),
+										tamRTP: 0,	//$('#TbRtpSize').val(),
+										codec: $('#SCodec option:selected').val(),
+										tipo: $('#SResourceType option:selected').val(),
+										restriccion: $('#SRestriccion option:selected').val(),
+										enableRegistro: $('#TbEnableRegister').prop('checked'),
+										szClave: $('#TbKey').val(),
+										LlamadaAutomatica: $('#CbLlamadaAutomatica').prop('checked')
+									}),
+									success: function(data){
+										if (data.error === null) {
+											if ($('#SResourceType option:selected').val() == 1)	{
+												// Radio
+												PostResourceToDestination(data.data.idRECURSO,$('#IdDestination').val(),function(){
+													GenerateHistoricEvent(ID_HW,ADD_HARDWARE_RESOURCE,data.data.name,$('#loggedUser').text());
+													
+													AssigSlaveToGateway(idSlave,$('#IdSite').data('gatewayId') , col);
+													
+													alertify.success('Recurso \"' + data.data.name + '\" añadido.');
+													
+													
+													// Si existe f, se añade la gateway a la lista para actualizar su configuración con 'Aplicar cambios'
+													if (f != null)
+														f();
+													
+													//GetMySlaves();
+													$('.Res' + fila + col).data('idResource',data.data.idRECURSO);
+													GetResource(data.data.idRECURSO,function(){
+														$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))}); AddRadioParameters()");
+														
+														$('#FormParameters').show();
+														$('#BtnRemoveResource').show();
+														
+														var t = ($('.Res' + fila + col).offset().top - 94) + 'px';
+														var l = ($('.Res' + fila + col).offset().left - 145) + 'px';
+														$('#BigSlavesZone').animate({width: '85%'},500,function(){
+															$('#BigSlavesZone').addClass('divNucleo');
+														});
+													});
+												});
+											}
+										}
+										else if (data.error == "ER_DUP_ENTRY") {
+											alertify.error('El recurso \"' + data.data.name + '\" ya existe.');
+										}
+									},
+									error: function(data){
+										alertify.error('El recurso \"' + data.data.name + '\" no existe.');
+									}
+								});
+							});
+						}
+						else{
+							// Si el recurso es de telefonía o, siendo de radio, tiene asignado frecuencia, se da de alta
+							$.ajax({type: 'POST',
+								dataType: 'json',
+								contentType:'application/json',
+								url: '/hardware/' + idSlave + '/resources/resource',
+								data: JSON.stringify({
+									POS_idPOS: fila,	// Ahora se pone la posición dentro de la slave, en la bd va el id del registro POS generado
+									name: $('#TbNameResource').val(),
+									tamRTP: 0,	//$('#TbRtpSize').val(),
+									codec: $('#SCodec option:selected').val(),
+									tipo: $('#SResourceType option:selected').val(),
+									restriccion: $('#SRestriccion option:selected').val(),
+									enableRegistro: $('#TbEnableRegister').prop('checked'),
+									szClave: $('#TbKey').val(),
+									LlamadaAutomatica: $('#CbLlamadaAutomatica').prop('checked')
+								}),
+								success: function(data){
+									if (data.error === null) {
+										if ($('#SResourceType option:selected').val() == 1)	{
+											// Radio
+											PostResourceToDestination(data.data.idRECURSO,$('#IdDestination').val(),function(){
+												GenerateHistoricEvent(ID_HW,ADD_HARDWARE_RESOURCE,data.data.name,$('#loggedUser').text());
+												alertify.success('Recurso \"' + data.data.name + '\" añadido.');
+												
+												// Si existe f, se añade la gateway a la lista para actualizar su configuración con 'Aplicar cambios'
+												if (f != null)
+													f();
+												
+												$('.Res' + fila + col).data('idResource',data.data.idRECURSO);
+												GetResource(data.data.idRECURSO,function(){
+													$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))});  AddRadioParameters()");
+													
+													$('#FormParameters').show();
+													$('#BtnRemoveResource').show();
+													
+													var t = ($('.Res' + fila + col).offset().top - 94) + 'px';
+													var l = ($('.Res' + fila + col).offset().left - 145) + 'px';
+													$('#BigSlavesZone').animate({width: '85%'},500,function(){
+														$('#BigSlavesZone').addClass('divNucleo');
+														/*if($('#SResourceType option:selected').val() == 1) {
+														 $('#CbGranularity option:eq(0)').attr("selected", "true");
+														 $('#CbGranularity').attr("disabled", "disabled");
+														 }*/
+													});
+												});
+											});
+										}
+										else{
+											// Telefonia
+											GenerateHistoricEvent(ID_HW,ADD_HARDWARE_RESOURCE,data.data.name,$('#loggedUser').text());
+											alertify.success('Recurso \"' + data.data.name + '\" añadido.');
+											
+											// Si existe f, se añade la gateway a la lista para actualizar su configuración con 'Aplicar cambios'
+											if (f != null)
+												f();
+											
+											$('.Res' + fila + col).data('idResource',data.data.idRECURSO);
+											GetResource(data.data.idRECURSO,function(){
+												$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))}); AddPhoneParameters()");
+												
+												$('#FormParameters').show();
+												$('#BtnRemoveResource').show();
+												
+												var t = ($('.Res' + fila + col).offset().top - 94) + 'px';
+												var l = ($('.Res' + fila + col).offset().left - 145) + 'px';
+												$('#BigSlavesZone').animate({width: '85%'},500,function(){
+													$('#BigSlavesZone').addClass('divNucleo');
+												});
+											});
+										}
+									}
+									else if (data.error == "ER_DUP_ENTRY") {
+										alertify.error('El recurso \"' + data.data.name + '\" ya existe.');
+										if (f != null)
+											f();
+									}
+								},
+								error: function(data){
+									alertify.error('El recurso \"' + data.data.name + '\" no existe.');
+									if (f != null)
+										f();
+								}
+							});
+						}
+					}
+					else{
+						alertify.error('El recurso radio debe estar asignado a una frecuencia.');
+						if (f != null)
+							f();
+					}
 				}
 			},
 			error: function (data) {
 				alertify.error('Error al comprobar el nombre del recurso en el sistema.');
 			}
 		});
-		*/
-		if((($('#SResourceType option:selected').val() != 1) || $('#IdDestination').val() != '')){
-			// Comprobar si la slave existe
-			if (idSlave == ''){
-				////////////////////////
-				// La slave no existe //
-				////////////////////////
-				AddSlave($('#IdSite').data('gatewayName'),col,function(data){
-					idSlave = data;
-					$.ajax({type: 'POST', 
-							dataType: 'json', 
-							contentType:'application/json',
-							url: '/hardware/' + idSlave + '/resources/resource', 
-							data: JSON.stringify({
-								POS_idPOS: fila,	// Ahora se pone la posición dentro de la slave, en la bd va el id del registro POS generado
-								name: $('#TbNameResource').val(),
-								tamRTP: 0,	//$('#TbRtpSize').val(),
-								codec: $('#SCodec option:selected').val(),
-								tipo: $('#SResourceType option:selected').val(),
-								restriccion: $('#SRestriccion option:selected').val(),
-								enableRegistro: $('#TbEnableRegister').prop('checked'),
-								szClave: $('#TbKey').val(),
-								LlamadaAutomatica: $('#CbLlamadaAutomatica').prop('checked')
-							}),
-							success: function(data){
-								if (data.error === null) {
-									if ($('#SResourceType option:selected').val() == 1)	{
-										// Radio
-										PostResourceToDestination(data.data.idRECURSO,$('#IdDestination').val(),function(){
-											GenerateHistoricEvent(ID_HW,ADD_HARDWARE_RESOURCE,data.data.name,$('#loggedUser').text());
-
-											AssigSlaveToGateway(idSlave,$('#IdSite').data('gatewayId') , col);
-
-											alertify.success('Recurso \"' + data.data.name + '\" añadido.');
-
-			
-											// Si existe f, se añade la gateway a la lista para actualizar su configuración con 'Aplicar cambios'
-											if (f != null)
-												f();
-
-											//GetMySlaves();
-											$('.Res' + fila + col).data('idResource',data.data.idRECURSO);
-											GetResource(data.data.idRECURSO,function(){
-												$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))}); AddRadioParameters()");
-
-												$('#FormParameters').show();
-												$('#BtnRemoveResource').show();
-
-												var t = ($('.Res' + fila + col).offset().top - 94) + 'px';
-												var l = ($('.Res' + fila + col).offset().left - 145) + 'px';
-												$('#BigSlavesZone').animate({width: '85%'},500,function(){
-														$('#BigSlavesZone').addClass('divNucleo');
-												});
-											});			
-										});
-									}
-								}
-								else if (data.error == "ER_DUP_ENTRY") {
-									alertify.error('El recurso \"' + data.data.name + '\" ya existe.');
-								}
-							},
-							error: function(data){
-								alertify.error('El recurso \"' + data.data.name + '\" no existe.');
-							}
-					});
-				});
-			}
-			else{
-				// Si el recurso es de telefonía o, siendo de radio, tiene asignado frecuencia, se da de alta
-				$.ajax({type: 'POST', 
-						dataType: 'json', 
-						contentType:'application/json',
-						url: '/hardware/' + idSlave + '/resources/resource', 
-						data: JSON.stringify({
-							POS_idPOS: fila,	// Ahora se pone la posición dentro de la slave, en la bd va el id del registro POS generado
-							name: $('#TbNameResource').val(),
-							tamRTP: 0,	//$('#TbRtpSize').val(),
-							codec: $('#SCodec option:selected').val(),
-							tipo: $('#SResourceType option:selected').val(),
-							restriccion: $('#SRestriccion option:selected').val(),
-							enableRegistro: $('#TbEnableRegister').prop('checked'),
-							szClave: $('#TbKey').val(),
-							LlamadaAutomatica: $('#CbLlamadaAutomatica').prop('checked')
-						}),
-						success: function(data){
-							if (data.error === null) {
-								if ($('#SResourceType option:selected').val() == 1)	{
-									// Radio
-									PostResourceToDestination(data.data.idRECURSO,$('#IdDestination').val(),function(){
-										GenerateHistoricEvent(ID_HW,ADD_HARDWARE_RESOURCE,data.data.name,$('#loggedUser').text());
-										alertify.success('Recurso \"' + data.data.name + '\" añadido.');
-
-										// Si existe f, se añade la gateway a la lista para actualizar su configuración con 'Aplicar cambios'
-										if (f != null)
-											f();
-
-										$('.Res' + fila + col).data('idResource',data.data.idRECURSO);
-										GetResource(data.data.idRECURSO,function(){
-											$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))});  AddRadioParameters()");
-
-											$('#FormParameters').show();
-											$('#BtnRemoveResource').show();
-
-											var t = ($('.Res' + fila + col).offset().top - 94) + 'px';
-											var l = ($('.Res' + fila + col).offset().left - 145) + 'px';
-											$('#BigSlavesZone').animate({width: '85%'},500,function(){
-													$('#BigSlavesZone').addClass('divNucleo');
-												/*if($('#SResourceType option:selected').val() == 1) {
-													$('#CbGranularity option:eq(0)').attr("selected", "true");
-													$('#CbGranularity').attr("disabled", "disabled");
-												}*/
-											});
-										});		
-									});
-								}
-								else{
-									// Telefonia
-									GenerateHistoricEvent(ID_HW,ADD_HARDWARE_RESOURCE,data.data.name,$('#loggedUser').text());
-									alertify.success('Recurso \"' + data.data.name + '\" añadido.');
-
-									// Si existe f, se añade la gateway a la lista para actualizar su configuración con 'Aplicar cambios'
-									if (f != null)
-										f();
-
-									$('.Res' + fila + col).data('idResource',data.data.idRECURSO);
-									GetResource(data.data.idRECURSO,function(){
-										$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))}); AddPhoneParameters()");
-
-										$('#FormParameters').show();
-										$('#BtnRemoveResource').show();
-
-										var t = ($('.Res' + fila + col).offset().top - 94) + 'px';
-										var l = ($('.Res' + fila + col).offset().left - 145) + 'px';
-										$('#BigSlavesZone').animate({width: '85%'},500,function(){
-												$('#BigSlavesZone').addClass('divNucleo');
-										});
-									});			
-								}
-							}
-							else if (data.error == "ER_DUP_ENTRY") {
-								alertify.error('El recurso \"' + data.data.name + '\" ya existe.');
-								if (f != null)
-									f();								
-							}
-						},
-						error: function(data){
-							alertify.error('El recurso \"' + data.data.name + '\" no existe.');
-							if (f != null)
-								f();								
-						}
-				});
-			}
-		}else{
-			alertify.error('El recurso radio debe estar asignado a una frecuencia.');
-			if (f != null)
-				f();								
-		}
 	}
 	else{
 		alertify.error('Nombre de recurso no válido.');
