@@ -1256,6 +1256,8 @@ function AddResource(slaveId, col, fila, f){
 													var t = ($('.Res' + fila + col).offset().top - 94) + 'px';
 													var l = ($('.Res' + fila + col).offset().left - 145) + 'px';
 													$('#BigSlavesZone').animate({width: '85%'},500,function(){
+														$('#TbAdGain').val('-1.3');//Valores por defecto en nuevo
+														$('#TbDaGain').val('-0.2');
 														$('#BigSlavesZone').addClass('divNucleo');
 														/*if($('#SResourceType option:selected').val() == 1) {
 														 $('#CbGranularity option:eq(0)').attr("selected", "true");
@@ -1284,6 +1286,8 @@ function AddResource(slaveId, col, fila, f){
 												var t = ($('.Res' + fila + col).offset().top - 94) + 'px';
 												var l = ($('.Res' + fila + col).offset().left - 145) + 'px';
 												$('#BigSlavesZone').animate({width: '85%'},500,function(){
+													$('#TbAdGain').val('-1.3');//Valores por defecto en nuevo
+													$('#TbDaGain').val('-0.2');
 													$('#BigSlavesZone').addClass('divNucleo');
 												});
 											});
