@@ -1026,6 +1026,7 @@ function SlaveFree(ev){
 /*** asignada a la misma pasarela 		  **/
 /*******************************************/
 function ResourceAssigned(ev,fila,columna){
+	loadingContent();
 	$('td.dropable').removeClass('target');
 	$('li.dropable').removeClass('target');
 	
@@ -1144,6 +1145,7 @@ function dragSlave(ev, rank, slave){
 /*** en otra pasarela a una pasarela	  **/
 /*******************************************/
 function SlaveAssigned(ev, rank, idSlave) {
+	loadingContent();
     ev.preventDefault();
     $('.dropable').removeClass('target');
 
