@@ -48,9 +48,9 @@ function ExportHistoricsToPdf(rows,filter){
 										header[7]={ text: user, style: 'tableHeader' }
 										
 										var start = 0;
-										var cuantos = 300;
+										var cuantos = 200;
 										var items = rows.slice(start,cuantos);
-										while (items.length > 0){
+										//while (items.length > 0){
 											var data=[];
 											data.push(header);
 											$.each(items,function(index,value){
@@ -110,11 +110,11 @@ function ExportHistoricsToPdf(rows,filter){
 													}
 												};
 												
-												pdfMake.createPdf(docDefinition).open();
+												pdfMake.createPdf(docDefinition).download();
 											})
 											//pdfMake.createPdf(docDefinition).download('U5K-G-' + start + '.pdf');
-											items = rows.slice(++start * cuantos,(start * cuantos) + cuantos);
-										}
+											//items = rows.slice(++start * cuantos,(start * cuantos) + cuantos);
+										//}
 									})
 								})
 							})
