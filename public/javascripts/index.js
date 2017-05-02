@@ -29,101 +29,12 @@ function ExportHistoricsToPdf(rows,filter){
 	
 	alertify.success('Generando fichero PDF');
 	
-	translateWord('DateTime',function(dateTime){
-		translateWord('Code',function(code){
-			translateWord('Group',function(group){
-				translateWord('Component',function(component){
-					translateWord('Description',function(description){
-						translateWord('Type',function(type){
-							translateWord('Acknowled',function(acknowled){
-								translateWord('TypeAlarm',function(typealarm){
-									translateWord('User',function(user){
-										header[0]={ text: dateTime, style: 'tableHeader' }
-										header[1]={ text: group, style: 'tableHeader' }
-										header[2]={ text: component, style: 'tableHeader' }
-										header[3]={ text: description, style: 'tableHeader' }
-										header[4]={ text: type, style: 'tableHeader' }
-										header[5]={ text: acknowled, style: 'tableHeader' }
-										header[6]={ text: typealarm, style: 'tableHeader' }
-										header[7]={ text: user, style: 'tableHeader' }
-										
-										var start = 0;
-										var cuantos = 200;
-										var items = rows.slice(start,cuantos);
-										//while (items.length > 0){
-											var data=[];
-											data.push(header);
-											$.each(items,function(index,value){
-												data.push(value);
-											})
-											
-											translateWord('Historics',function(historic){
-												var docDefinition = {
-													footer: function(currentPage, pageCount) { return {text: currentPage.toString() + ' / ' + pageCount, alignment: 'center', margin: [ 0, 5, 0, 0 ]  }},
-													background: function(currentPage){
-														if (currentPage > 1)
-															return	{ text: filter, style: 'subheader' };
-													},
-													// a string or { width: number, height: number }
-													pageSize:'A4',
-													// by default we use portrait, you can change it to landscape if you wish
-													pageOrientation: 'landscape',
-													content:[
-														{ text: historic, style: 'header' },
-														{ text: filter, style: 'subheader' },
-														{
-															style: 'tableExample',
-															table: {
-																headerRows: 1,
-																// keepWithHeaderRows: 1,
-																// dontBreakRows: true,
-																body:data
-															}
-														},
-													],
-													styles: {
-														header: {
-															fontSize: 18,
-															bold: true,
-															margin: [0, 0, 0, 10],
-															color: 'red',
-															alignment: 'center'
-														},
-														subheader: {
-															fontSize: 16,
-															bold: true,
-															color: '#D2747D',
-															margin: [0, 10, 0, 5]
-														},
-														tableExample: {
-															margin: [0, 5, 0, 15]
-														},
-														tableHeader: {
-															bold: true,
-															fontSize: 12,
-															color: 'black'
-														}
-													},
-													defaultStyle: {
-														// alignment: 'justify'
-														fontSize: 10
-													}
-												};
-												
-												pdfMake.createPdf(docDefinition).download();
-											})
-											//pdfMake.createPdf(docDefinition).download('U5K-G-' + start + '.pdf');
-											//items = rows.slice(++start * cuantos,(start * cuantos) + cuantos);
-										//}
-									})
-								})
-							})
-						})
-					})
-				})
-			})
-		})
-	})
+	var doc = new jsPDF();
+	doc.text(10, 10, 'Hello everybody');
+	doc.text(10, 20, 'My name is');
+	doc.text(10, 40, 'Contact me at');
+	doc.text(10, 30, 'I have just created a simple pdf using jspdf');
+	doc.save('katara.pdf'); // Save the PDF with name "katara"...
 }
 
 function SetCookie(name, value){
