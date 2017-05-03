@@ -1358,12 +1358,14 @@ function UpdateResource(slaveId, col, fila, f) {
 			else
 				UpdateResourceReally(slaveId, col, fila, f);
 		}
-		else if( $('#LbTypeRadio option:selected').val() == 2 ) {
+		//else if( $('#LbTypeRadio option:selected').val() == 2 ) {
 			
-		}
-		else if( $('#LbTypeRadio option:selected').val() == 3 ) {
+		//}
+		//else if( $('#LbTypeRadio option:selected').val() == 3 ) {
 			
-		}
+		//}
+		else
+			UpdateResourceReally(slaveId, col, fila, f);
 	}
 	if($('#SResourceType option:selected').val() == 2) { //Recurso Telefonía
 		if ($('#TbRemoteUri')[0].value == null || $('#TbRemoteUri')[0].value == '') {
