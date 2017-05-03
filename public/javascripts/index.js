@@ -24,48 +24,46 @@ var script = document.createElement('script');
 script.src = 'http://code.jquery.com/jquery-1.11.2.min.js';
 script.type = 'text/javascript';
 
-function ExportHistoricsToPdf(rows,filter){
-	var header=[];
+function ExportHistoricsToPdf(rows,filter) {
+	var header = [];
 	
 	alertify.success('Generando fichero PDF');
 	
-	translateWord('DateTime',function(dateTime){
-		translateWord('Code',function(code){
-			translateWord('Group',function(group){
-				translateWord('Component',function(component){
-					translateWord('Description',function(description){
-						translateWord('Type',function(type){
-							translateWord('Acknowled',function(acknowled){
-								translateWord('TypeAlarm',function(typealarm){
-									translateWord('User',function(user){
-										header[0]=dateTime
-										header[1]=group
-										header[2]={ text: component, style: 'tableHeader' }
-										header[3]={ text: description, style: 'tableHeader' }
-										header[4]={ text: type, style: 'tableHeader' }
-										header[5]={ text: acknowled, style: 'tableHeader' }
-										header[6]={ text: typealarm, style: 'tableHeader' }
-										header[7]={ text: user, style: 'tableHeader' }
-										var data = []
-											,fontSize = 12
-											,height = 0
-											,doc
-											;
-										data.push(header);
-										doc = new jsPDF('p', 'pt', 'a4', true);
-										doc.setFont("courier", "normal");
-										doc.setFontSize(fontSize);
+	translateWord('DateTime', function (dateTime) {
+		translateWord('Code', function (code) {
+			translateWord('Group', function (group) {
+				translateWord('Component', function (component) {
+					translateWord('Description', function (description) {
+						translateWord('Type', function (type) {
+							translateWord('Acknowled', function (acknowled) {
+								translateWord('TypeAlarm', function (typealarm) {
+									translateWord('User', function (user) {
 										
-										/*for (var insert = 0; insert <= 2; insert++) {
-											data.push({
-												dateTime : "jspdf plugin",
-												"version" : insert,
-												"author" : "Prashanth Nelli",
-												"Designation" : "AngularJs Developer"
-											});
-										}*/
-										height = doc.drawTable(data, {xstart:10,ystart:10,tablestart:70,marginleft:50});
-										doc.save("some-file.pdf");
+										header[0]=dateTime;
+										header[1]=group;
+										header[2]=component;
+										header[3]=description;
+										header[4]=type;
+										header[5]=acknowled;
+										header[6]=typealarm;
+										header[7]=user;
+										
+										/*var rows = [
+											[1, "Shaw", "Tanzania",1,1,1,1,1],
+											[2, "Nelson", "Kazakhstan",1,1,1,1,1],
+											[3, "Garcia", "Madagascar",1,1,1,1,1]
+										];*/
+										
+										var doc = new jsPDF('l','','');
+										doc.autoTableSetDefaults({headerStyles: {fillColor: [255, 50, 40]}});// Red
+										doc.autoTable(header, rows, {
+											startY: 20,
+											margin: {horizontal: 7},
+											bodyStyles: {valign: 'top'},
+											styles: {overflow: 'linebreak', columnWidth: 'wrap'},
+											columnStyles: {text: {columnWidth: 'auto'}}
+										});
+										doc.save('table.pdf');
 									})
 								})
 							})
