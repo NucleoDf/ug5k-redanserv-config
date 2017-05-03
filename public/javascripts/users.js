@@ -177,7 +177,7 @@ var GetUsuario = function (ind,valor){
 					$('#AddFormUser').data('idOperador',usuario.idOPERADORES);
 
 					var valor = usuario.perfil;
-					for (var i=0;i<15;i++){
+					for (var i=0;i<16;i++){
 						if ((i!=2) && (i!=5)){		// el perfil 2 no existe, y el 5 es ingenieria					
 							if (Boolean(valor & 1)) {
 								$('#' + (Math.pow(2,i))).prop('checked',true);
