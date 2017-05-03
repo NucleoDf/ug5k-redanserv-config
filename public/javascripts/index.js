@@ -24,7 +24,7 @@ var script = document.createElement('script');
 script.src = 'http://code.jquery.com/jquery-1.11.2.min.js';
 script.type = 'text/javascript';
 
-function ExportHistoricsToPdf(rows,filter) {
+function ExportHistoricsToPdf(rows, filter) {
 	var header = [];
 	
 	alertify.success('Generando fichero PDF');
@@ -39,7 +39,7 @@ function ExportHistoricsToPdf(rows,filter) {
 								translateWord('TypeAlarm', function (typealarm) {
 									translateWord('User', function (user) {
 										
-										header[0]=dateTime;
+										header[0]="Fecha-\nHora";
 										header[1]=group;
 										header[2]=component;
 										header[3]=description;
@@ -48,22 +48,24 @@ function ExportHistoricsToPdf(rows,filter) {
 										header[6]=typealarm;
 										header[7]=user;
 										
-										/*var rows = [
-											[1, "Shaw", "Tanzania",1,1,1,1,1],
-											[2, "Nelson", "Kazakhstan",1,1,1,1,1],
-											[3, "Garcia", "Madagascar",1,1,1,1,1]
-										];*/
-										
-										var doc = new jsPDF('l','','');
+										var doc = new jsPDF('l');
+										doc.text(7, 15, "HISTORICOS: "+filter);
 										doc.autoTableSetDefaults({headerStyles: {fillColor: [255, 50, 40]}});// Red
 										doc.autoTable(header, rows, {
 											startY: 20,
 											margin: {horizontal: 7},
 											bodyStyles: {valign: 'top'},
-											styles: {overflow: 'linebreak', columnWidth: 'wrap'},
-											columnStyles: {text: {columnWidth: 'auto'}}
-										});
-										doc.save('table.pdf');
+											columnStyles: {
+											0: {columnWidth: 30, overflow: 'linebreak'},
+											1: {columnWidth: 30, overflow: 'linebreak'},
+											2: {columnWidth: 30, overflow: 'linebreak'},
+											3: {columnWidth: 90, overflow: 'linebreak'},
+											4: {columnWidth: 20, overflow: 'linebreak'},
+											5: {columnWidth: 25, overflow: 'linebreak'},
+											6: {columnWidth: 25, overflow: 'linebreak'},
+											7: {columnWidth: 30, overflow: 'linebreak'}
+										}});
+										doc.save('Historicos.pdf');
 									})
 								})
 							})
@@ -74,6 +76,19 @@ function ExportHistoricsToPdf(rows,filter) {
 		})
 	})
 }
+
+var getColumns = function () {
+	return [
+		{title: "Fecha-Hora", dataKey: "datetime"},
+		{title: "Name", dataKey: "name"},
+		{title: "Email", dataKey: "email"},
+		{title: "City", dataKey: "city"},
+		{title: "Name2", dataKey: "name2"},
+		{title: "Email2", dataKey: "email2"},
+		{title: "City2", dataKey: "city2"},
+		{title: "Expenses", dataKey: "expenses"}
+	];
+};
 
 function SetCookie(name, value){
 	if ($('#BodyRedan').data('logintimeout') != '0'){
