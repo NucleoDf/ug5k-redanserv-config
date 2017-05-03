@@ -29,12 +29,52 @@ function ExportHistoricsToPdf(rows,filter){
 	
 	alertify.success('Generando fichero PDF');
 	
-	var doc = new jsPDF();
-	doc.text(10, 10, 'Hello everybody');
-	doc.text(10, 20, 'My name is');
-	doc.text(10, 40, 'Contact me at');
-	doc.text(10, 30, 'I have just created a simple pdf using jspdf');
-	doc.save('katara.pdf'); // Save the PDF with name "katara"...
+	translateWord('DateTime',function(dateTime){
+		translateWord('Code',function(code){
+			translateWord('Group',function(group){
+				translateWord('Component',function(component){
+					translateWord('Description',function(description){
+						translateWord('Type',function(type){
+							translateWord('Acknowled',function(acknowled){
+								translateWord('TypeAlarm',function(typealarm){
+									translateWord('User',function(user){
+										header[0]=dateTime
+										header[1]=group
+										header[2]={ text: component, style: 'tableHeader' }
+										header[3]={ text: description, style: 'tableHeader' }
+										header[4]={ text: type, style: 'tableHeader' }
+										header[5]={ text: acknowled, style: 'tableHeader' }
+										header[6]={ text: typealarm, style: 'tableHeader' }
+										header[7]={ text: user, style: 'tableHeader' }
+										var data = []
+											,fontSize = 12
+											,height = 0
+											,doc
+											;
+										data.push(header);
+										doc = new jsPDF('p', 'pt', 'a4', true);
+										doc.setFont("courier", "normal");
+										doc.setFontSize(fontSize);
+										
+										/*for (var insert = 0; insert <= 2; insert++) {
+											data.push({
+												dateTime : "jspdf plugin",
+												"version" : insert,
+												"author" : "Prashanth Nelli",
+												"Designation" : "AngularJs Developer"
+											});
+										}*/
+										height = doc.drawTable(data, {xstart:10,ystart:10,tablestart:70,marginleft:50});
+										doc.save("some-file.pdf");
+									})
+								})
+							})
+						})
+					})
+				})
+			})
+		})
+	})
 }
 
 function SetCookie(name, value){
