@@ -1789,9 +1789,14 @@ function ShowResourcesFromSlave(idSlave,slave, data, isFirstLoad, f){
 									.attr('ondragstart',"dragResource(event," + r.POS_idPOS + "," + fila + "," + idSlave + ")");
 				}
 
-				$('.Res' + fila + col + ' a').text(r.resource)
-											.append(r.tipo == 1 ? $("<img src='/images/iconRadio.gif' style='float: right'/>")
-																: $("<img src='/images/iconPhone.gif' style='float: right'/>"));
+				if(r.tipo == 1) {
+					$('.Res' + fila + col + ' a').text(r.resource).append(' - '+r.Frecuencia+' Mhz').append($("<img src='/images/iconRadio.gif' style='float: right'/>"));
+				}
+				else
+					$('.Res' + fila + col + ' a').text(r.resource).append($("<img src='/images/iconPhone.gif' style='float: right'/>"));
+											
+	
+			
 			}
 		});
 		//totalRecursos += loadIndex;
