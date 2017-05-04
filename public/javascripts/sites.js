@@ -584,9 +584,9 @@ var CopySingleSite = function(){
 	$('#NavMenu').addClass('disabledDiv')
 	$('#Add').addClass('disabledDiv');
 	
-	$('#CopySiteZone').attr('style','position:absolute;width:0px;height:0px;top:380px;left:460px');
+	$('#CopySiteZone').attr('style','position:absolute;width:0px;height:0px;top:80px;left:460px');
 	$('#CopySiteZone').show();
-	$('#CopySiteZone').animate({width: '35%', height: '175px'},500,function(){
+	$('#CopySiteZone').animate({width: '35%', height: '250px'},500,function(){
 		$('#CopySiteZone').addClass('divNucleo')
 	});
 }
