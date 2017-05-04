@@ -11,7 +11,61 @@ script.
 
 
 
+	function ExportHistoricsToPdf(rows, filter) {
+		var header = [];
 
+		alertify.success('Generando fichero PDF');
+
+		translateWord('DateTime', function (dateTime) {
+			translateWord('Code', function (code) {
+				translateWord('Group', function (group) {
+					translateWord('Component', function (component) {
+						translateWord('Description', function (description) {
+							translateWord('Type', function (type) {
+								translateWord('Acknowled', function (acknowled) {
+									translateWord('TypeAlarm', function (typealarm) {
+										translateWord('User', function (user) {
+
+											header[0] = "Fecha-\nHora";
+											header[1] = group;
+											header[2] = component;
+											header[3] = description;
+											header[4] = type;
+											header[5] = acknowled;
+											header[6] = typealarm;
+											header[7] = user;
+
+											var doc = new jsPDF('l');
+											doc.setFontType("bold");
+											doc.setFontSize(11);
+											doc.text(7, 15, "HISTORICOS: " + filter);
+											doc.autoTableSetDefaults({headerStyles: {fillColor: [255, 50, 40]}});// Red
+											doc.autoTable(header, rows, {
+												startY: 20,
+												margin: {horizontal: 7},
+												bodyStyles: {valign: 'top'},
+												columnStyles: {
+													0: {columnWidth: 30, overflow: 'linebreak'},
+													1: {columnWidth: 30, overflow: 'linebreak'},
+													2: {columnWidth: 30, overflow: 'linebreak'},
+													3: {columnWidth: 90, overflow: 'linebreak'},
+													4: {columnWidth: 20, overflow: 'linebreak'},
+													5: {columnWidth: 25, overflow: 'linebreak'},
+													6: {columnWidth: 25, overflow: 'linebreak'},
+													7: {columnWidth: 30, overflow: 'linebreak'}
+												}
+											});
+											doc.save('Historicos.pdf');
+										})
+									})
+								})
+							})
+						})
+					})
+				})
+			})
+		})
+	}
 	function ExportHistoricsToPdfEvents(rows,filter){
 		var header=[];
 		
@@ -368,7 +422,7 @@ div(id="FormHistorics", style="display: none; width: 350px")
 				td
 					a.ButtonNucleo#BtnToPdf(onclick='ExportHistoricsToPdf(dataToPrint,filterReport)' style='display:none') PDF
 				
-					a.ButtonNucleo#BtnToPdfEvents(onclick='ExportHistoricsToPdfEvents(dataToPrint,filterReport)' style='display:none') PDF
+					a.ButtonNucleo#BtnToPdfEvents(onclick='ExportHistoricsToPdf(dataToPrint,filterReport)' style='display:none') PDF
 				td
 					a.ButtonNucleo#BtnToExcel(onclick="doCsv('TableToExcel')" style='display:none') Excel
 
