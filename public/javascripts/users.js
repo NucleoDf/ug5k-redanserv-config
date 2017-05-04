@@ -43,7 +43,6 @@ var DelUsuario = function(){
 /*	PUT Method  */
 /****************/
 var PutUser = function(){
-	var gateways=[];
 
 	var perfil=GetPerfil();
 	if ($('#IdOperador').val()== ''){
@@ -62,6 +61,8 @@ var PutUser = function(){
 		return;
 	}
 
+	var gateways=[];
+	/* AGL *****************
 	var permisoVisualizacionGatewayLocal = perfil & 128;
 	var permisoAdministracionGatewayLocal = perfil & 256;
 	if ((permisoVisualizacionGatewayLocal == 128) || (permisoAdministracionGatewayLocal==256)){
@@ -71,7 +72,8 @@ var PutUser = function(){
   				gateways.push($(this).data('idgtw'));
 		});
 	}
-
+	*********************/
+	
 	$.ajax({type: 'PUT', 
 			dataType: 'json', 
 			contentType:'application/json',
@@ -117,6 +119,8 @@ var PostUser = function (){
 	}
 
 	var gateways=[];
+	
+	/** AGL **********************
 	var permisoVisualizacionGatewayLocal = perfil & 128;
 	var permisoAdministracionGatewayLocal = perfil & 256;
 	if ((permisoVisualizacionGatewayLocal == 128) || (permisoAdministracionGatewayLocal==256)){
@@ -126,6 +130,7 @@ var PostUser = function (){
   				gateways.push($(this).data('idgtw'));
 		});
 	}
+	*****************************/
 
 	$.ajax({type: 'POST', 
 			dataType: 'json', 
@@ -157,6 +162,11 @@ var PostUser = function (){
 };
 
 var GetUsuario = function (ind,valor){
+	/** AGL */
+	var divOperadorShortWidth = {width: '535px'};
+	var divOperadorLongWidth = {width: '535px'};
+	var divDatoUsuarioWidth = {width: '350px'};
+	
 	if ($('#AddFormUser').is(':visible')){
 				$('#DivOperador').animate({width: '535px'});
 			}
@@ -189,11 +199,19 @@ var GetUsuario = function (ind,valor){
 						valor >>>= 1;
 					}
 
+					/** AGL ***************************************
 					GetGatewaysToOp(usuario.idOPERADORES,function(){
 						GetSitesToOp();
 					});
+					*************************************/	
 					//$('#' + usuario.perfil).prop('checked',true);
 
+/** AGL... *************************************/					
+					$('#DivOperador').animate({width: '1000px'});
+					$('#DatosUsuario').animate({width: '410px'});
+					$('#GatewayToOp').hide();
+					$('#IdOperador').prop( "disabled", true );
+/*
 					if ((usuario.perfil & 128) == 128 || (usuario.perfil & 256) == 256) {
 						$('#DivOperador').animate({width: '1250px'});
 						$('#DatosUsuario').animate({width: '650px'},function(){
@@ -206,6 +224,7 @@ var GetUsuario = function (ind,valor){
 							$('#GatewayToOp').hide();
 						});
 					}
+*/
 
 					translateWord('Update',function(result){
 						$('#UpdateUserButton').text(result)
@@ -216,11 +235,12 @@ var GetUsuario = function (ind,valor){
 	}
 	else{
 		$('#GatewayToOp').hide();
-			
+		
+		/** AGL **********************************	
 		GetGatewaysToOp(-1,function(){
 			GetSitesToOp();
 		});
-
+		****************************************/
 
 		for (var i=0;i<16;i++){
 		/*La posicion 3 es el reconocimiento de alarmas que ya no se usa pero se mantienen  la posición del resto por compatibilidad con otras aplicaciones*/
@@ -232,7 +252,11 @@ var GetUsuario = function (ind,valor){
 		}
 
 		$('#FormOperador').show();
-		$('#DivOperador').animate({width: '900px'});
+		$('#DivOperador').animate({width: '1000px'});
+		/** AGL */
+		$('#DatosUsuario').animate({width: '410px'});
+		$('#IdOperador').prop( "disabled", false );
+		/*****************/
 		translateWord('Add',function(result){
 			$('#UpdateUserButton').text(result)
 								.attr('onclick','PostUser();AddGatewaysFromActiveToListOfGateways()');
@@ -288,6 +312,7 @@ var GetPerfil = function(){
 };
 
 var GetSitesToOp = function(){
+    /** AGL ********************************
 	$.ajax({type: 'GET', 
 			url: '/sites'})
 		.done(function(data){
@@ -335,10 +360,13 @@ var GetSitesToOp = function(){
 	   var item = $(texto);
 	   item.appendTo($("#listSitesToOp"));
 	});
+	***************************************/
+	console.log("Llamando a GetSitesToOp");
 };
 
 
 var GetGtwToSite = function (id,name,showMe){
+/** AGL ***********************
 	if (showMe){
 		var lista='#gtw-site-' + id;
 		if ($(lista).is(':visible')){
@@ -374,19 +402,27 @@ var GetGtwToSite = function (id,name,showMe){
 					}
 			 	}
 	});	
+	*********************/
+	console.log("Llamando a GetGwToSite");
 };
 
+
 var CheckEveryGateway = function(sender,list){
+    /** AGL ****************************
 	if ($('#' + sender).prop ('checked'))
 		$('#'+list + ' input:checkbox').prop ('checked',true);
 	else
 		$('#'+list + ' input:checkbox').prop ('checked',false);
+	****************/
+	console.log("Llamando a CheckEveryGateway");
 };
 
 var ShowGateways = function(){
+	/** AGL
 	var perfil = GetPerfil();
 	var permisoVisualizacion = perfil & 128;
 	var permisoAdministracion = perfil & 256;
+	
 	if ((permisoVisualizacion== 128) || (permisoAdministracion== 256)){
 		$('#DivOperador').animate({width: '1250px'});
 		$('#DatosUsuario').animate({width: '650px'},function(){
@@ -399,31 +435,34 @@ var ShowGateways = function(){
 			$('#GatewayToOp').hide();
 		});
 	}
-
+	*******************************/
+	console.log("Llamando a ShowGateways");
+	
 	//Habilitar o deshabilitar perfiles para que no se pueda asignar mas de uno a un usuario
-	/*for (var i=0;i<16;i++){
-		//La posicion 3 es el reconocimiento de alarmas que ya no se usa pero se mantienen  la posición del resto por compatibilidad con otras aplicaciones
-		//Con la 5 pasa lo mismo, era el perfil ingenieria
-		if ((i!=2) && (i!=5)) {
-			var valor = Math.pow(2,i);
-			if (perfil != 0){
-				if ($('#' + valor).prop('checked')){
-					$('#' + valor).prop('disabled', false);
-				}
-				else				
-				{
-					$('#' + valor).prop('disabled', true);
-				}
-			}
-			else{
-				$('#' + valor).prop('disabled', false);
-			}
+	// /*for (var i=0;i<16;i++){
+		// //La posicion 3 es el reconocimiento de alarmas que ya no se usa pero se mantienen  la posición del resto por compatibilidad con otras aplicaciones
+		// //Con la 5 pasa lo mismo, era el perfil ingenieria
+		// if ((i!=2) && (i!=5)) {
+			// var valor = Math.pow(2,i);
+			// if (perfil != 0){
+				// if ($('#' + valor).prop('checked')){
+					// $('#' + valor).prop('disabled', false);
+				// }
+				// else				
+				// {
+					// $('#' + valor).prop('disabled', true);
+				// }
+			// }
+			// else{
+				// $('#' + valor).prop('disabled', false);
+			// }
 		
-		}
-	}*/
+		// }
+	// }*/
 };
 
 var GetGatewaysToOp = function(idOperador,f){
+/** AGL *************************
 	gatewaysFromOperator=[];
 
 	$.ajax({type: 'GET', 
@@ -438,5 +477,19 @@ var GetGatewaysToOp = function(idOperador,f){
 			if (f != null)
 				f();
 		});
+	************************/
+	console.log("Llamando a GetGatewaysToOp");
 };
+
+/** AGL */
+var OperationExt=function(elem, checkVis) {
+	console.log("Llamando a OperationExt " + $(elem).prop("checked").toString() + " " + checkVis.toString());
+	if (checkVis==true) {
+		if ($(elem).prop("checked")) {
+			$('#1').prop("checked", true);
+		}
+	}
+};
+
+
 
