@@ -45,7 +45,7 @@ app.post('/',[
             dest: './uploads/'
             }).single('upl'),
         function(req,res){
-            console.log(req.file); //form files
+            logging.LoggingDate(req.file); //form files
             /* example output:
                     { fieldname: 'upl',
                       originalname: 'grumpy.png',

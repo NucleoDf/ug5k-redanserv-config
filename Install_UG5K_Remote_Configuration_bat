@@ -27,6 +27,8 @@ goto menu
 :install-ug5k
 md %1
 
+md %1\logs
+
 md %1\bin
 xcopy .\bin %1\bin /SY
 

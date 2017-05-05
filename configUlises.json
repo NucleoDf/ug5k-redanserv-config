@@ -29,6 +29,11 @@
 	"dbhost" : "localhost",
 	"dbuser" : "root",
 	"dbpassword" : "U5K-G",
-	"dbdatabase" : "ug5k" 
+	"dbdatabase" : "ug5k",
+	"log2file" : true,
+	"logfile_path": "./logs/ug5kserv.log",
+	"logfile_maxfiles": 4,
+	"logfile_sizefile": 10000000,
+	"log2con"  : true
   }
 }
