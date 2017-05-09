@@ -3,6 +3,11 @@ var dataToPrint=[];
 var filterReport='';
 var subHeader = "";
 
+/** 20170508 AGL. Calculo de Pagina en curso inicial */
+var InitialPage = function(howMany) {
+	return howMany==0 ? 0 : 1;
+}
+
 var AddRecordsForReport = function(value, filter){
 	filterReport = filter;
 
@@ -180,9 +185,7 @@ var GetOverallHistorics = function() {
 									$('#TableHistorics').fadeIn(500);
 									$('#FormHistorics').data('numPages',Math.floor(data.howMany/ROWS_BY_PAGE) + ((data.howMany % ROWS_BY_PAGE) != 0 ? 1 : 0));
 									$('#TblHistoricos').data('filtering','none');
-									$('#Page').text($('#Page').data('page') + 1 + '/' + $('#FormHistorics').data('numPages') + (data.howMany == 3000 ? '	(*)' : ''));
-
-
+									$('#Page').text($('#Page').data('page') + InitialPage(data.howMany) + '/' + $('#FormHistorics').data('numPages') + (data.howMany == 3000 ? '	(*)' : ''));
 							});
 						});	
 					});											
@@ -242,7 +245,7 @@ var GetOverallHistoricsEvents = function() {
 					$('#TableHistorics').fadeIn(500);
 					$('#FormHistorics').data('numPages',Math.floor(data.howMany/ROWS_BY_PAGE) + ((data.howMany % ROWS_BY_PAGE) != 0 ? 1 : 0));
 					$('#TblHistoricos').data('filtering','events');
-					$('#Page').text($('#Page').data('page') + 1 + '/' + $('#FormHistorics').data('numPages') + (data.howMany == 3000 ? '	(*)' : ''));
+					$('#Page').text($('#Page').data('page') + InitialPage(data.howMany) + '/' + $('#FormHistorics').data('numPages') + (data.howMany == 3000 ? '	(*)' : ''));
 				}
 		});
 	});
@@ -324,7 +327,7 @@ var GetOverallHistoricsAlarms = function() {
 										$('#TableHistorics').fadeIn(500);
 										$('#FormHistorics').data('numPages',Math.floor(data.howMany/ROWS_BY_PAGE) + ((data.howMany % ROWS_BY_PAGE) != 0 ? 1 : 0));
 										$('#TblHistoricos').data('filtering','alarms');
-										$('#Page').text($('#Page').data('page') + 1 + '/' + $('#FormHistorics').data('numPages') + (data.howMany == 3000 ? '	(*)' : ''));
+										$('#Page').text($('#Page').data('page') + InitialPage(data.howMany) + '/' + $('#FormHistorics').data('numPages') + (data.howMany == 3000 ? '	(*)' : ''));
 									});
 								});	
 						});
@@ -346,7 +349,7 @@ var GetRangeHistorics = function(start,howMany) {
 					$('#TableHistorics').fadeIn(500);
 					var h='';
 					$('#TableHistorics tr:gt(0)').remove();
-					$('#Page').text($('#Page').data('page') + 1 + '/' + $('#FormHistorics').data('numPages'));
+					$('#Page').text($('#Page').data('page') + InitialPage(data.howMany) + '/' + $('#FormHistorics').data('numPages'));
 					var AlarmNoUrgent='';
 					var AlarmUrgent='';
 					var AlarmCritique='';
@@ -404,7 +407,7 @@ var GetRangeHistoricsEvents = function(start,howMany) {
 					$('#TableHistorics').fadeIn(500);
 					var h='';
 					$('#TableHistorics tr:gt(0)').remove();
-					$('#Page').text($('#Page').data('page') + 1 + '/' + $('#FormHistorics').data('numPages'));
+					$('#Page').text($('#Page').data('page') + InitialPage(data.howMany) + '/' + $('#FormHistorics').data('numPages'));
 
 					$.each(data.historics, function(index, value){
 
@@ -435,7 +438,7 @@ var GetRangeHistoricsAlarms = function(start,howMany) {
 					$('#TableHistorics').fadeIn(500);
 					var h='';
 					$('#TableHistorics tr:gt(0)').remove();
-					$('#Page').text($('#Page').data('page') + 1 + '/' + $('#FormHistorics').data('numPages'));
+					$('#Page').text($('#Page').data('page') + InitialPage(data.howMany) + '/' + $('#FormHistorics').data('numPages'));
 					var AlarmNoUrgent='';
 					var AlarmUrgent='';
 					var AlarmCritique='';
@@ -607,7 +610,7 @@ function FilteringByGroup(noRange){
 						$('#TableToExcelEvents tr:gt(0)').remove();
 					}
 					$('#TblHistoricos').data('filtering','group');
-					$('#Page').text($('#Page').data('page') + 1 + '/' + $('#FormHistorics').data('numPages'));
+					$('#Page').text($('#Page').data('page') + InitialPage(data.howMany) + '/' + $('#FormHistorics').data('numPages'));
 
 					$('#TableHistorics th:nth-child(6)').show();
 					$('#TableHistorics th:nth-child(7)').show();
@@ -1145,6 +1148,9 @@ function FilteringByDateStatistics(){
 				url: strUrl,
 				success: function(data){
 					if (data.error == null){
+						// 20170509. AGL. Controlar que data.rate y data.mtfb son numericos.
+						data.rate = !data.rate ? 0 : data.rate;
+						data.mtbf = !data.mtbf ? 0 : data.mtbf;
 						$('#tasa').val(Number(Math.round(data.rate+'e2')+'e-2').toString().replace('.',','));	// Redondear a dos decimales
 						$('#mtbf').val(Number(Math.round(data.mtbf+'e2')+'e-2').toString().replace('.',',')); 	// Redondear a dos decimales
 						//$('#mut').val(Number(Math.round(data.mut+'e2')+'e-2').toString().replace('.',','));		// Redondear a dos decimales
@@ -1214,7 +1220,10 @@ function FilteringByComponentStatistics(){
 		$.ajax({type: 'GET', 
 				url: strUrl,
 				success: function(data){
-					if (data.error == null){
+					if (data.error == null){						
+						// 20170509. AGL. Controlar que data.rate y data.mtfb son numericos.
+						data.rate = !data.rate ? 0 : data.rate;
+						data.mtbf = !data.mtbf ? 0 : data.mtbf;
 						$('#tasa').val(Number(Math.round(data.rate+'e2')+'e-2').toString().replace('.',','));	// Redondear a dos decimales
 						$('#mtbf').val(Number(Math.round(data.mtbf+'e2')+'e-2').toString().replace('.',',')); 	// Redondear a dos decimales
 						//$('#mut').val(Number(Math.round(data.mut+'e2')+'e-2').toString().replace('.',','));		// Redondear a dos decimales
@@ -1279,6 +1288,9 @@ function FilteringByCodeStatistics(){
 				url: strUrl,
 				success: function(data){
 					if (data.error == null){
+						// 20170509. AGL. Controlar que data.rate y data.mtfb son numericos.
+						data.rate = !data.rate ? 0 : data.rate;
+						data.mtbf = !data.mtbf ? 0 : data.mtbf;
 						$('#tasa').val(Number(Math.round(data.rate+'e2')+'e-2').toString().replace('.',','));	// Redondear a dos decimales
 						$('#mtbf').val(Number(Math.round(data.mtbf+'e2')+'e-2').toString().replace('.',',')); 	// Redondear a dos decimales
 						//$('#mut').val(Number(Math.round(data.mut+'e2')+'e-2').toString().replace('.',','));		// Redondear a dos decimales
