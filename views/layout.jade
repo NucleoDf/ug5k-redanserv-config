@@ -323,7 +323,6 @@ html
 										a(id="opcionMant" onclick="hideMenu(\'#MenuHistoricos\',\'#MenuMantenimiento\'); LoadGatewaysInActiveConfiguration()" tkey='Maintenance')
 									li
 										a(id="opcionBackup" onclick="hideMenu(\'#MenuBackup\',\'#MenuCfgBackup\');" tkey='Backup')
-
 			#MenuConfiguration
 				table#Principal(style='width:100%')
 					tr(style='vertical-align:top')
@@ -337,7 +336,8 @@ html
 										a(id="opcionTabla" onclick="CheckingAnyChange(\'GeneralContent\', function(){hidePrevious(\'#FormTableBss\',\'#AddTableBss\',\'#DivTableBss\'); GetTablesBss()})", tkey='TableBss')
 									li(id="lopcionUsuarios")
 										a(id="opcionUsuarios" onclick="CheckingAnyChange(\'GeneralContent\', function(){hidePrevious(\'#FormOperador\',\'#AddFormUser\',\'#DivOperador\'); GetUsuarios()})", tkey='Users')
-									li(id="lopcionVersion")
+									// AGL..		
+									//li(id="lopcionVersion")
 										a(id="opcionVersion" onclick="CheckingAnyChange(\'GeneralContent\', function(){hidePrevious(\'#FormVersion\',\'#AddFormVersion\',\'#DivVersion\'); GetVersion(false)})", tkey='MenuVersion')
 									li(style='margin-top:100px')
 										a( onclick="CheckingAnyChange(\'GeneralContent\', function(){hide()})", tkey='Exit') 
@@ -359,8 +359,9 @@ html
 							// FORM SITES
 							block sites
 							include ./services/postSites.jade
-							block version
-							include ./version/version.jade
+							// AGL.
+							// block version
+							// include ./version/version.jade
 							// FORM RADIO DESTINATIONS
 							//block destinations
 							//include ./services/postRadioDestination.jade
@@ -377,12 +378,18 @@ html
 										a(id="opcionEstadi" onclick="showMaintenancePanel('Estadisticas')" tkey='Statistic')
 									//li
 									//	a(id="opcionPasarel" onclick="showMaintenancePanel('Pasarelas')" tkey='Gateways')
+									// AGL. FORM VERSION.
+									li(id="lopcionVersion")
+										a(id="opcionVersion" onclick="CheckingAnyChange(\'GeneralContent\', function(){hidePreviousHistorics(\'#FormVersion\',\'#AddFormVersion\',\'#DivVersion\'); GetVersion(false)})", tkey='MenuVersion')
 									li(style='margin-top:199px')
 										a( onclick="hide()", tkey='Exit') 
 						td#Historicos(rowspan=2)
-							//	FORM HISTORICS
+							// FORM HISTORICS
 							block historics
 							include ./historics/historics.jade
+							// AGL. FORM VERSION
+							block version
+							include ./version/version.jade
 					tr(style='vertical-align:top')
 						td#MenuFiltros(style='display:table-column')
 							nav.menu(style='height:330px')
