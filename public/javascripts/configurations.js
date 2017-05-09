@@ -897,6 +897,8 @@ var GetActiveCfgAndActivate = function(){
 														alertify.success('Configuración \"'+ data.name + '\" activada.');
 														// Reset list of gateways to activate
 														AddGatewayToList(null);
+														/** 20170509. AGL Gestor 'Aplicar cambios' en usuarios */
+														usersModified = false;
 														// Generar histórico con cada pasarela que no se pudo configurar
 														// por estar desconectada del servidor
 														if (existe.gateways != null){

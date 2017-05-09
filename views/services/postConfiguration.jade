@@ -41,7 +41,9 @@ script.
 		//translateWord('Activate',function(result){
 			if ($('#listaOpciones li:nth-last-child(2) a ').text() == 'Apply changes' ||
 				$('#listaOpciones li:nth-last-child(2) a ').text() == 'Aplicar cambios' ) {
-				if (listOfGateways.length == 0)
+				/** 20170509. AGL Gestor 'Aplicar cambios' */
+				if (listOfGateways.length == 0 && usersModified == false)
+				/* if (listOfGateways.length == 0 )*/
 					$('#listaOpciones li:nth-last-child(2)').addClass('menuListDisabled');
 				else
 					if(EnableAplicarCambiosPerfil($('#BodyRedan').data('perfil')))

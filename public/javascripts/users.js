@@ -4,6 +4,8 @@
 /******************************************************************************************************/
 //var link_enlaces = [];
 var gatewaysFromOperator=[];
+/** 20170509. AGL Gestor 'Aplicar cambios' */
+var usersModified = false;
 
 var DelUsuario = function(){
 	if ($('#IdOperador').val()==$('#loggedUser').text()){
@@ -17,13 +19,15 @@ var DelUsuario = function(){
 					url: '/users/' + $('#IdOperador').val(), 
 					//data: JSON.stringify( { "name": $('#IdOperador').val() } ),
 					success: function(data){
-								if (data.error === 0){
+								if (data.error === 0) {
 									alertify.error('El usuario \"' + data.data + '\" no existe.');
 								}
 								else {
 									GenerateHistoricEvent(ID_HW,REMOVE_USER,$('#IdOperador').val(),$('#loggedUser').text());
 									alertify.success('Usuario \"' + data.data + '\" eliminado.');
 									GetUsuarios();
+									/** 20170509. AGL Gestor 'Aplicar cambios' */
+									usersModified = true;								
 								}
 							},
 					error: function(data){
@@ -90,6 +94,8 @@ var PutUser = function(){
 						GenerateHistoricEvent(ID_HW,MODIFY_USER,$('#IdOperador').val(),$('#loggedUser').text());
 						alertify.success('Usuario \"' + $('#IdOperador').val() + '\" actualizado.');
 						GetUsuarios();
+						/** 20170509. AGL Gestor 'Aplicar cambios' */
+						usersModified = true;								
 					},
 			error: function(data){
 						alertify.error('El usuario \"' + $('#IdOperador').val() + '\" no existe.');
@@ -149,6 +155,8 @@ var PostUser = function (){
 						GenerateHistoricEvent(ID_HW,ADD_USER,$('#IdOperador').val(),$('#loggedUser').text());
 						alertify.success('El usuario \"' + $('#IdOperador').val() + '\" ha sido creado.');
 						GetUsuarios();
+						/** 20170509. AGL Gestor 'Aplicar cambios' */
+						usersModified = true;								
 					}
 					else if (data.error == "ER_DUP_ENTRY")
 						alertify.error('El usuario \"' + $('#IdOperador').val() + '\" ya existe.');
