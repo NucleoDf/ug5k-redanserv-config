@@ -32,6 +32,14 @@ router.route('/checkipaddr/:ip/:idCfg')
 		});
 	});
 
+router.route('/checkgtwname/:name/:idCfg')
+	.get(function(req,res){
+		logging.LoggingDate(req.method + ': ' + req.baseUrl + req.url);
+		myLibGateways.getGatewaysNamesInConfig(req.params.name,req.params.idCfg, function(gtw){
+			res.json(gtw.error);
+		});
+	});
+
 router.route('/checkipaddr4changesite/:ipb1/:ipb2/:idEmp')
 	.get(function(req,res){
 		logging.LoggingDate(req.method + ': ' + req.baseUrl + req.url);
