@@ -1193,7 +1193,7 @@ function AddResource(slaveId, col, fila, f){
 													//GetMySlaves();
 													$('.Res' + fila + col).data('idResource',data.data.idRECURSO);
 													GetResource(data.data.idRECURSO,function(){
-														$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))}); AddRadioParameters()");
+														$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))})");
 														
 														$('#FormParameters').show();
 														$('#BtnRemoveResource').show();
@@ -1248,7 +1248,7 @@ function AddResource(slaveId, col, fila, f){
 												
 												$('.Res' + fila + col).data('idResource',data.data.idRECURSO);
 												GetResource(data.data.idRECURSO,function(){
-													$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))});  AddRadioParameters()");
+													$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))})");
 													
 													$('#FormParameters').show();
 													$('#BtnRemoveResource').show();
