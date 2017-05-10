@@ -182,15 +182,33 @@ script.
 			}
 		}
 
-		function ValidateIds(element,label){
+		function ValidateIds(element,label) {
 			var regx_idval = /^[a-zA-Z0-9\-_.]{1,32}$/;
 
 			var matchIp = $(element).val().match(regx_idval);
-			if ($(element).val()!='' && matchIp == null){
-				Fade(element,label)
+			if ($(element).val() != '' && matchIp == null) {
+				Fade(element, label)
 			}
-			if ($(element).length > 32){
-				Fade(element,label)
+			if ($(element).length > 32) {
+				Fade(element, label)
+			}
+
+			else {
+				if ($(element).val() != element.oldValue && element.name == 'nameGw') {
+					$.ajax({
+						type: 'GET',
+						url: '/gateways/checkgtwname/' + $(element).val() + '/' + $('#DivConfigurations').data('idCFG'),
+						success: function (data) {
+							if (data == "NAME_DUP" && element.name == 'nameGw') {
+								alertify.error('El nombre: ' + $(element).val() + ' ya se encuentra dado de alta en esta configuración.');
+								$(element).val(element.oldValue);
+							}
+						},
+						error: function (data) {
+							alertify.error('Error al comprobar los nombres disponibles en el sistema.');
+						}
+					});
+				}
 			}
 		}
 
