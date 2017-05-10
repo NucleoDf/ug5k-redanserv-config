@@ -105,14 +105,14 @@ router.route('/:gateway')
   		logging.LoggingDate("POST gateways/:gateway");
 	  	var newGateway = req.body.general;
 		var service = req.body.servicios;
-		myLibGateways.gatewayExists(req.body.idConf,newGateway,function(result){
-			if (result.error == 'ER_DUP_ENTRY')
-				res.json(result);
-			else{
-			  	myLibGateways.postGateway(req.body.idConf, true, true, newGateway,service,function(result){
-			  		res.json(result);
-			  	});
-			}
+		//myLibGateways.gatewayExists(req.body.idConf,newGateway,function(result){
+		//	if (result.error == 'ER_DUP_ENTRY')
+		//		res.json(result);
+		//	else{
+		myLibGateways.postGateway(req.body.idConf, true, true, newGateway,service,function(result){
+		res.json(result);
+		//});
+		//}
 		});
 	})
 	.get(function(req, res) {
@@ -134,8 +134,8 @@ router.route('/:gateway')
 		var gtw = req.body.general;
 		var service = req.body.servicios;
 		logging.LoggingDate("PUT Gateways/:gateway");
-		myLibGateways.gatewayExists(req.body.idConf,gtw,function(result){
-			if (result.error == 'ER_DUP_ENTRY'){
+		//myLibGateways.gatewayExists(req.body.idConf,gtw,function(result){
+			/*if (result.error == 'ER_DUP_ENTRY'){
 				var i=0;
 				while (i<result.data.length){
 					if (result.data[i].idCGW != gtw.idCGW){
@@ -152,12 +152,12 @@ router.route('/:gateway')
 				}
 				else
 					res.json({error:result.error});
-			}
-			else{
-				myLibGateways.putGateway(req, res, gtw,service, function(gtw){
-					res.status(201).json(gtw);
-				});
-			}
+			}*/
+			//else{
+		myLibGateways.putGateway(req, res, gtw,service, function(gtw){
+		res.status(201).json(gtw);
+			//	});
+			//}
 		});
 	})
 	.copy(function(req,res){
