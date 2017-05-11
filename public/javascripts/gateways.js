@@ -14,6 +14,7 @@ var ChangeGateWaySite = function(data){
 	var oldIndex = data[data.oldValue].value;
 	var newIndex = data[data.selectedIndex].value;
 	var idCgw = $('#DivGateways').data('idCgw');
+	var oldIdCFG = $('#DivConfigurations').data('idCFG')
  	var oldEmpl = data[data.oldValue].outerText;
 	var newEmpl = data[data.selectedIndex].outerText;
 	var ipb1 = '';
@@ -31,7 +32,7 @@ var ChangeGateWaySite = function(data){
 	$.ajax({
 		type: 'GET',
 		//url: '/gateways/' + $('#Component').text() + '/services/' + serviceId,
-		url: '/gateways/checkipaddr4changesite/' + ipb1 + '/' + ipb2 + '/' + newIndex,
+		url: '/gateways/checkipaddr4changesite/' + ipb1 + '/' + ipb2 + '/' + newIndex+ '/' + oldIdCFG,
 		success: function (data) {
 			if (data == "IP_DUP_1" ) {
 				alertify.error('La dirección ip: ' + ipb1 + ' ya se encuentra dada de alta en la configuración de destino.');

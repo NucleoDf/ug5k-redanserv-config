@@ -446,7 +446,7 @@ function GotoResource(row,col,update){
 				else
 					$('#KeyRow').hide();
 				if (update == true) {
-					$('#ButtonCommit').attr('onclick', "UpdateResource('" + $('.Slave' + col).data('idSLAVE') + "','" + col + "','" + row + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))}); AddRadioParameters()")
+					$('#ButtonCommit').attr('onclick', "UpdateResource('" + $('.Slave' + col).data('idSLAVE') + "','" + col + "','" + row + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))})")
 					//if ($('#SResourceType option:selected').val() == 1) {
 						//$('#ButtonCommit').attr('onclick', "UpdateResource('" + $('.Slave' + col).data('idSLAVE') + "','" + col + "','" + row + "','" + loadIndex + "','" + totalIndex + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))}); AddRadioParameters()")
 						//$('#ButtonCommit').on('click', function (e) {
