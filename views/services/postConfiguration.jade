@@ -42,14 +42,20 @@ script.
 			if ($('#listaOpciones li:nth-last-child(2) a ').text() == 'Apply changes' ||
 				$('#listaOpciones li:nth-last-child(2) a ').text() == 'Aplicar cambios' ) {
 				/** 20170509. AGL Gestor 'Aplicar cambios' */
-				if (listOfGateways.length == 0 && usersModified == false)
-				/* if (listOfGateways.length == 0 )*/
+				if (listOfGateways.length == 0 && usersModified == false) {
+				/* if (listOfGateways.length == 0 )
+				   ****************************************************/
 					$('#listaOpciones li:nth-last-child(2)').addClass('menuListDisabled');
-				else
-					if(EnableAplicarCambiosPerfil($('#BodyRedan').data('perfil')))
+				}
+				else {
+					/* 20170511. AGL. PERFILES */
+					if (Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccLoadcProfMsc])==true)
+					/* if(EnableAplicarCambiosPerfil($('#BodyRedan').data('perfil')))
+					******************************************/
 						$('#listaOpciones li:nth-last-child(2)').removeClass('menuListDisabled');
 					else
 						$('#listaOpciones li:nth-last-child(2)').addClass('menuListDisabled');
+				}
 			}
 			setTimeout(function(){EnableAplicarCambios()},1000);
 		//});

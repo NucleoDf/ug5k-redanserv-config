@@ -584,10 +584,17 @@ function BlockResourceZone(block, fila){
 }
 
 function ShowNewResource(fila){
-	
-	if (($('#BodyRedan').data('perfil') & 1) == 1 || (blockZone && fila!=lastSelectedResource))
-		// Si hay un recurso seleccionado y pulsan sobre otro distinto se ignora
+	// Si hay un recurso seleccionado y pulsan sobre otro distinto se ignora
+	/** 20170511. AGL PERFILES. TODO. Que perfiles estan permitidos??? */
+	if (Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccConfiProfMsc])==false) {
 		return;
+	}
+	if ((blockZone && fila!=lastSelectedResource)) {
+		return;
+	}
+	/* if (($('#BodyRedan').data('perfil') & 1) == 1 || (blockZone && fila!=lastSelectedResource))
+		return;
+		*******************************************/
 
 	blockZone = true;
 	ResetResourcePanel();
@@ -781,10 +788,15 @@ function ShowDataOfResource(data,f){
 			$('#WhiteBlackList tr:nth-child(1)').remove();
 
 		var indice = 0;
-		var clase = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='New NotAllowedTd'" : "";
+
+		/** 20170511. AGL. Perfiles */
+		var clase = Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccConfiProfMsc]) == false ? " class='New NotAllowedTd'" : "";
+		var clase_a = Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccConfiProfMsc]) == false ? " class='ButtonNucleo NotAllowedBtn'" : "class='ButtonNucleo'";
+		var clase_ = Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccConfiProfMsc]) == false ? " class='NotAllowedBtn'" : "";
+		/*var clase = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='New NotAllowedTd'" : "";
 		var clase_a = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='ButtonNucleo NotAllowedBtn'" : "class='ButtonNucleo'";
 		var clase_ = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='NotAllowedBtn'" : "";
-
+		*****************************************/
 		if (f != null)
 			f();
 		
@@ -890,9 +902,14 @@ function ShowListsFromResource(data){
 		$('#WhiteBlackList tr:nth-child(1)').remove();
 	
 	var indice = 0;
-	var clase = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='New NotAllowedTd'" : "";
+	/** 20170511. AGL. Perfiles */
+	var clase = Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccConfiProfMsc]) == false ? " class='New NotAllowedTd'" : "";
+	var clase_a = Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccConfiProfMsc]) == false ? " class='ButtonNucleo NotAllowedBtn'" : "class='ButtonNucleo'";
+	var clase_ = Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccConfiProfMsc]) == false ? " class='NotAllowedBtn'" : "";
+	/*var clase = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='New NotAllowedTd'" : "";
 	var clase_a = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='ButtonNucleo NotAllowedBtn'" : "class='ButtonNucleo'";
 	var clase_ = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='NotAllowedBtn'" : "";
+	******************************************/
 
 	if (data == 'NO_DATA')
 		return;
@@ -1420,8 +1437,11 @@ function UpdateResourceReally(slaveId, col, fila, f){
 		newIndex=1;
 	
 	var newTotal = parseInt(totalIndex) + (newIndex - parseInt(loadIndex));*/
-	
-	if (($('#BodyRedan').data('perfil') & 1) != 1){
+
+	/** 20170511 AGL. PERFILES */
+	if (Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccConfiProfMsc])==true) {
+	/*if (($('#BodyRedan').data('perfil') & 1) != 1){
+		***************************************************/
 		if ($('#TbNameResource').val().length > 0){
 			if ($('#SResourceType option:selected').val() == 1)	{
 				if ($('#IdDestination').val() == ''){
@@ -1877,9 +1897,14 @@ function ShowRangeAts(data){
 		var actualiza=result;	
 		translateWord('Remove',function(result){
 			var remove=result;
-			var clase = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='New NotAllowedTd'" : "";
+			/** 20170511 AGL. PERFILES */
+			var clase = Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccConfiProfMsc]) == false ? " class='New NotAllowedTd'" : "";
+			var clase_a = Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccConfiProfMsc]) == false ? " class='ButtonNucleo NotAllowedBtn'" : "class='ButtonNucleo'";
+			var clase_ = Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccConfiProfMsc]) == false ? " class='NotAllowedBtn'" : "";
+			/*var clase = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='New NotAllowedTd'" : "";
 			var clase_a = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='ButtonNucleo NotAllowedBtn'" : "class='ButtonNucleo'";
 			var clase_ = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='NotAllowedBtn'" : "";
+			*************************************************/
 			if(data!='NO_DATA') {
 				$.each(data.ranks, function (index, value) {
 					if (value.origen) {

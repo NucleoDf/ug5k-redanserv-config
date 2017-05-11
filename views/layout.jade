@@ -210,13 +210,16 @@ html
 				})
 			}
 
-			function hide(){
-				if (($('#BodyRedan').data('perfil') & 64) != 64){
-					window.location=$('#BodyRedan').data('actualLocation');
-					checkCookie = false;
-					document.cookie = 'U5K-G=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
-					return;
-				}
+			function hide() {
+				/** 20170511. AGL. PERFILES */
+				//- if (Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc])==false) {
+				//- /*if (($('#BodyRedan').data('perfil') & 64) != 64) {
+				//- 	**************************************************/					
+				//- 	window.location=$('#BodyRedan').data('actualLocation');
+				//- 	checkCookie = false; 
+				//- 	document.cookie = 'U5K-G=; expires=Thu, 01 Jan 1970 00:00:00 UTC';
+				//- 	return;
+				//- }
 
 				if (actual != ''){
 					$(actualAnimate).fadeOut(500,function(){
@@ -285,9 +288,9 @@ html
 							img#imgLogo(src="images/nucleo-df-new.jpg")
 				td(style='width:60%')
 					#_tit_ppal.divCabeceraNucleo
-						h1.efecto-espejo(style='text-align:center') ULISES G 5000 R
-						//
-							.divCabeceraNucleo
+						// h1.efecto-espejo(style='text-align:center') ULISES G 5000 R
+						h1(style='text-align:center') ULISES G 5000 R
+						// .divCabeceraNucleo
 						h2#hRegion						
 
 				td(style='width:25%')
@@ -317,11 +320,11 @@ html
 							nav.menu
 								h3 Menu General
 								ul.menuList(style='height:15%')
-									li
+									li#mgCfg
 										a(id="opcionConfig" onclick="hideMenu(\'#MenuConfiguration\',\'#MenuOpciones\')" tkey='Configuration')
-									li
+									li(id="mgHis")
 										a(id="opcionMant" onclick="hideMenu(\'#MenuHistoricos\',\'#MenuMantenimiento\'); LoadGatewaysInActiveConfiguration()" tkey='Maintenance')
-									li
+									li#mgBkp
 										a(id="opcionBackup" onclick="hideMenu(\'#MenuBackup\',\'#MenuCfgBackup\');" tkey='Backup')
 			#MenuConfiguration
 				table#Principal(style='width:100%')
@@ -330,7 +333,7 @@ html
 							nav#NavMenu.menu(style='width:auto;height: 670px')
 								h3(tkey='Options') 
 								ul#listaOpciones.menuList(style='height:inherit')
-									li
+									li#cfCfg
 										a(id="opcionConfigs" onclick="CheckingAnyChange(\'GeneralContent\', function(){hidePrevious(\'#FormConfiguration\',\'#AddFormConfiguration\',\'#DivConfigurations\'); GetConfigurations()})" tkey='Configurations')
 									li(id="lopcionTabla")
 										a(id="opcionTabla" onclick="CheckingAnyChange(\'GeneralContent\', function(){hidePrevious(\'#FormTableBss\',\'#AddTableBss\',\'#DivTableBss\'); GetTablesBss()})", tkey='TableBss')
@@ -339,7 +342,7 @@ html
 									// AGL..		
 									//li(id="lopcionVersion")
 										a(id="opcionVersion" onclick="CheckingAnyChange(\'GeneralContent\', function(){hidePrevious(\'#FormVersion\',\'#AddFormVersion\',\'#DivVersion\'); GetVersion(false)})", tkey='MenuVersion')
-									li(style='margin-top:100px')
+									li#cfVolver(style='margin-top:100px')
 										a( onclick="CheckingAnyChange(\'GeneralContent\', function(){hide()})", tkey='Exit') 
 						td#GeneralDiv
 							block content

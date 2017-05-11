@@ -19,8 +19,28 @@ var MODIFY_HARDWARE_RESOURCE_LOGIC_PARAM	=	116;
 var REMOVE_CALIFICATION_AUDIO_TABLE			=	117;
 
 var ID_HW	=	'CFG';
-
 var script = document.createElement('script');
+
+/** 20170511. AGL. PERFILES. Para la Gestion de Perfiles */
+var visualProfMsc = 0x0001;
+var ccUsersProfMsc= 0x0010;
+var ccAdminProfMsc= 0x0040;
+var ccHistoProfMsc= 0x0200;
+var ccBackpProfMsc= 0x0400;
+var ccConfiProfMsc= 0x4000;
+var ccLoadcProfMsc= 0x8000;
+function Authorize(currentProfile, authorizedProfiles) {
+	if (!currentProfile || !authorizedProfiles )
+		return false;
+	for (i=0; i<authorizedProfiles.length; i++) {
+		var partialProfile = currentProfile & authorizedProfiles[i];
+		if (partialProfile != 0)
+			return true;
+	}
+	return false;
+}
+/************************************************** */
+
 script.src = 'http://code.jquery.com/jquery-1.11.2.min.js';
 script.type = 'text/javascript';
 
@@ -87,8 +107,7 @@ function getAuthenticatedUser(data){
 }
 
 function myEncode(e){
-	e.preventDefault();
-	
+	e.preventDefault();	
 
 	$('#BodyRedan').data('actualLocation',window.location.href);
 
@@ -150,15 +169,16 @@ function myEncode(e){
 					var perfilConfiguraciones      = ((usuario.perfil & 16384)?true:false);
 					var perfilCargaConfiguraciones = ((usuario.perfil & 32768)?true:false);
 
-					if ((perfilMando || perfilReconAlarmas || perfilVerLocalGateway || perfilAdminLocalGateway || perfilBocina || perfilGestionConfLocal || perfilActualizacionSw) &&
-						(!perfilVisualizacion && !perfilGestUsuarios && !perfilAdministracion && !perfilHistoricos && !perfilBackup && !perfilConfiguraciones &&
-						 !perfilCargaConfiguraciones)){
-
+/** 20170511. AGL. Reviso el perfil de los que pueden acceder */
+					// if ((perfilMando || perfilReconAlarmas || perfilVerLocalGateway || perfilAdminLocalGateway || perfilBocina || perfilGestionConfLocal || perfilActualizacionSw) &&
+					// 	(!perfilVisualizacion && !perfilGestUsuarios && !perfilAdministracion && !perfilHistoricos && !perfilBackup && !perfilConfiguraciones &&
+					// 	 !perfilCargaConfiguraciones))
+					if (!perfilVisualizacion && !perfilGestUsuarios && !perfilAdministracion && !perfilHistoricos && !perfilBackup && !perfilConfiguraciones &&
+					 	 !perfilCargaConfiguraciones) {
 						$('#LoginIncorrect').show();
 						GenerateHistoricEvent(ID_HW,ACCESS_SYSTEM_FAIL,$('#Operador').val());
 						return;
 					}
-
 
 					// Resto de perfiles de usuario
 
@@ -186,12 +206,39 @@ function myEncode(e){
 
 					$('#Login-Operador').hide();
 					$('#loggedUser').text(usuario.name);
-				
-					/*$('#MenuGeneral').addClass('menuListDisabled')
-					$('#MenuOpciones ul li').addClass('menuListDisabled');
+
+					/** 20170511 AGL. PERFILES. */
+					$('#MenuGeneral').attr('style','display:table-cell;width:11%');
+					$('#MenuGeneral').removeClass('menuListDisabled')
+					$('#MenuOpciones').removeClass('menuListDisabled');
+
 					$('.New').addClass('NotAllowedTd');
 					$('.New *:first-child').addClass('NotAllowedBtn');
-					*/
+
+					if (Authorize(usuario.perfil,[ccAdminProfMsc,visualProfMsc,ccUsersProfMsc,ccConfiProfMsc,ccLoadcProfMsc])==false) {
+						$('#mgCfg').hide();
+					}
+					if (Authorize(usuario.perfil,[ccAdminProfMsc,ccHistoProfMsc])==false) {
+						$('#mgHis').hide();
+					}
+					if (Authorize(usuario.perfil,[ccAdminProfMsc,ccBackpProfMsc])==false) {
+						$('#mgBkp').hide();
+					}
+					if (Authorize(usuario.perfil,[ccAdminProfMsc,visualProfMsc,ccConfiProfMsc,ccLoadcProfMsc])==false) {
+						$('#cfCfg').hide();
+					}
+					if (Authorize(usuario.perfil,[ccAdminProfMsc,ccUsersProfMsc])==false) {
+						$('#lopcionUsuarios').hide();
+					}
+					if (Authorize(usuario.perfil,[ccAdminProfMsc,ccConfiProfMsc])==false) {
+						$('#lopcionTabla').hide();
+					}					
+					if (Authorize(usuario.perfil,[ccAdminProfMsc,ccConfiProfMsc,ccLoadcProfMsc])==true) {
+						$('.New').removeClass('NotAllowedTd');
+						$('.New *:first-child').removeClass('NotAllowedBtn');
+					}
+
+					/*
 					var list = [
 						{id: '#opcionConfig', text: $('#opcionConfig').text(), func: $('#opcionConfig').attr('onclick')},
 						{id: '#opcionMant', text: $('#opcionMant').text(), func: $('#opcionMant').attr('onclick')},
@@ -251,42 +298,52 @@ function myEncode(e){
 						$('#opcionConfig').text(list[0].text);
 						$('#opcionConfig').attr('onclick', list[0].func);
 						$('#opcionConfig').removeClass('hide');
+
 						$('#opcionMant').text(list[1].text);
 						$('#opcionMant').attr('onclick', list[1].func);
 						$('#opcionMant').removeClass('hide');
+
 						$('#opcionBackup').text(list[2].text);
 						$('#opcionBackup').attr('onclick', list[2].func);
 						$('#opcionBackup').removeClass('hide');
+
 						$('#opcionConfigs').text(list[3].text);
 						$('#opcionConfigs').attr('onclick', list[3].func);
 						$('#opcionConfigs').removeClass('hide');
+
 						$('#opcionTabla').text(list[4].text);
 						$('#opcionTabla').attr('onclick', list[4].func);
 						$('#opcionTabla').removeClass('hide');
+
 						$('#opcionUsuarios').text(list[5].text);
 						$('#opcionUsuarios').attr('onclick', list[5].func);
 						$('#opcionUsuarios').removeClass('hide');
+
 						$('#opcionVersion').text(list[6].text);
 						$('#opcionVersion').attr('onclick', list[6].func);
 						$('#opcionVersion').removeClass('hide');
+
 						$('#opcionHistoric').text(list[7].text);
 						$('#opcionHistoric').attr('onclick', list[7].func);
 						$('#opcionHistoric').removeClass('hide');
+
 						$('#opcionEstadi').text(list[8].text);
 						$('#opcionEstadi').attr('onclick', list[8].func);
 						$('#opcionEstadi').removeClass('hide');
+
 						$('#opcionPasarel').text(list[9].text);
 						$('#opcionPasarel').attr('onclick', list[9].func);
 						$('#opcionPasarel').removeClass('hide');
 						return;
 					}
-					if (perfilVisualizacion || perfilConfiguraciones) {
+					if (perfilVisualizacion || perfilConfiguraciones || perfilGestUsuarios) {
 						$('#MenuGeneral').attr('style','display:table-cell;width:11%');
 						$('#MenuGeneral').removeClass('menuListDisabled');
 						
 						$('#opcionConfig').text(list[0].text);
 						$('#opcionConfig').attr('onclick', list[0].func);
 						$('#opcionConfig').removeClass('hide');
+
 						$('#opcionConfigs').text(list[3].text);
 						$('#opcionConfigs').attr('onclick', list[3].func);
 						$('#opcionConfigs').removeClass('hide');
@@ -295,16 +352,15 @@ function myEncode(e){
 							$('.New').removeClass('NotAllowedTd');
 							$('.New *:first-child').removeClass('NotAllowedBtn');
 						}
-					}
-					
-					if (perfilGestUsuarios){
-						$('#MenuGeneral').attr('style','display:table-cell;width:11%');
-						$('#MenuGeneral').removeClass('menuListDisabled');
-						
-						$('#opcionUsuarios').text(list[5].text);
-						$('#opcionUsuarios').attr('onclick', list[5].func);
-						$('#opcionUsuarios').removeClass('hide');
-					}
+						if (perfilGestUsuarios){
+							$('#MenuGeneral').attr('style','display:table-cell;width:11%');
+							$('#MenuGeneral').removeClass('menuListDisabled');
+							
+							$('#opcionUsuarios').text(list[5].text);
+							$('#opcionUsuarios').attr('onclick', list[5].func);
+							$('#opcionUsuarios').removeClass('hide');
+						}
+					}					
 
 					if (perfilHistoricos) {
 						$('#MenuGeneral').attr('style','display:table-cell;width:11%');
@@ -330,7 +386,7 @@ function myEncode(e){
 						$('#opcionBackup').attr('onclick', list[2].func);
 						$('#opcionBackup').removeClass('hide');
 					}
-					
+					**********************************************************************/
 					
 					//si es un perfil no controlado
 					//$('#MenuGeneral').attr('style','display:table-cell;width:11%');
