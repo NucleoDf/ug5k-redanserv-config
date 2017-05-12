@@ -651,7 +651,10 @@ var GetGateway = function (gtw,lastUpdate,f){
 	
 	$('#lips').hide();
 	$('#ips').hide();
-	$('#ExportGateway').show();
+	
+	/** 20170512 AGL. OCULTAR BOTONES COPIA / IMPORT / EXPORT */
+	/* $('#ExportGateway').show();
+	*******************************************/
 	
 	if (gtw != null){
 		var urlString = '/gateways/'+gtw;

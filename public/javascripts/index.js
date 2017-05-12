@@ -392,6 +392,12 @@ function myEncode(e){
 					//$('#MenuGeneral').attr('style','display:table-cell;width:11%');
 					//$('#MenuOpciones ul li').removeClass('menuListDisabled');
 
+					/** 20170512 AGL. OCULTAR BOTONES COPIA / IMPORT / EXPORT */
+					$('#BtnCopyCfg').hide();		// Copia Configuracion
+					$('#BtnCopySite').hide();		// Copia Emplazamiento.
+					$('#BtnImport').hide();			// Boton IMPORT.
+					$('#ExportGateway').hide();		// Boton EXPORT.
+
 					return;
 
 

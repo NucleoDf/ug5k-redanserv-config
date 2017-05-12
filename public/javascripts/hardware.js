@@ -1721,14 +1721,15 @@ function ShowRadioParamsOfResource(data){
 					if (($('#UriTxA')[0].value == null) || ($('#UriTxA')[0].value == '') &&
 						($('#UriRxA')[0].value == null) || ($('#UriRxA')[0].value == ''))
 						$('#ListMenuSites li:first-child').find("a").text('+');
-					else {
-						try {
-							('#ListMenuSites li:first-child').find("a").text('Colateral');
-						}
-						catch (err) {
-							alertify.error("Error: "+err.message);
-						}
-					}
+					/** 201705 AGL Error Notificado... */
+					// else {
+					// 	try {
+					// 		('#ListMenuSites li:first-child').find("a").text('Colateral');
+					// 	}
+					// 	catch (err) {
+					// 		alertify.error("Error: "+err.message);
+					// 	}
+					// }
 					break;
 				case 1:
 					$('#ListMenuSites li:first-child').find("a").text('Colateral');
