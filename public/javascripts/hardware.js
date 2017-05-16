@@ -1257,6 +1257,7 @@ function AddResource(slaveId, col, fila, f){
 											// Radio
 											PostResourceToDestination(data.data.idRECURSO,$('#IdDestination').val(),function(){
 												GenerateHistoricEvent(ID_HW,ADD_HARDWARE_RESOURCE,data.data.name,$('#loggedUser').text());
+
 												alertify.success('Recurso \"' + data.data.name + '\" añadido.');
 												
 												// Si existe f, se añade la gateway a la lista para actualizar su configuración con 'Aplicar cambios'
@@ -1280,6 +1281,10 @@ function AddResource(slaveId, col, fila, f){
 														 $('#CbGranularity option:eq(0)').attr("selected", "true");
 														 $('#CbGranularity').attr("disabled", "disabled");
 														 }*/
+													
+													/** 20170516. AGL. Los recursos radio por defecto tienen el audio estricto  */
+													$('#CbGranularity option[value="0"]').prop('selected',true);
+
 													});
 												});
 											});
