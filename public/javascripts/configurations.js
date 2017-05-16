@@ -302,7 +302,8 @@ var DelConfiguration = function(){
 		alertify.error("No se permite eliminar la configuración activa.");
 	}
 	else{
-		alertify.confirm('Ulises G 5000 R', "¿Eliminar la configuración \"" + $('#name').val() + "\".?", 
+		alertify.confirm('Ulises G 5000 R', "ATENCION. ¿Desea eliminar la configuración \"" + $('#name').val() + "\"? " +
+			"También se eliminarán todos los emplazamientos y pasarelas asociadas a dicha configuración.",
 			function(){ 
 						$.ajax({type: 'DELETE', 
 						url: '/configurations/' + $('#DivConfigurations').data('idCFG'),
@@ -310,7 +311,7 @@ var DelConfiguration = function(){
 									if (data.error === 0)
 										alertify.error('La configuración \"'+ data.data + '\" no existe.');
 									else {
-										alertify.success('Configuración \"'+ data.data + '\" elminada.');
+										alertify.success('Configuración \"'+ $('#name').val()+ '\" elminada.');
 										$('#AddFormConfiguration').hide();
 										$('#tableTools').hide();
 
