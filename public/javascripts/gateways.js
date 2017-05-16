@@ -1207,17 +1207,48 @@ function modify(editText,select){
 	$(editText).val($(select).val());
 }
 
+/** AGL. 20170516. AGL. Funcion Generica ADD Elemento a Lista Desplegable */
+function Add2Select(idSelect, Item2Insert, limit, idTipo) {
+	var currentItems = $(idSelect)["0"].length;
+	if (currentItems >= limit) {
+		alertify.error('Solo se pueden insertar ' + limit + ' ' + idTipo);
+		return;		
+	}
+	if (Item2Insert != '') {
+		/** Comprobar que no esta repetido... */
+		$(idSelect + " > option").each(function() {
+			if (this.text == Item2Insert) {
+				alertify.error('El elemento ' + idTipo + ' ' + Item2Insert + ", ya está en la lista");
+				Item2Insert = null;
+			}
+		});
+		/** Insertar el ITEM. */
+		if (Item2Insert) {
+			$(idSelect).append($('<option>',{
+				value: Item2Insert, 
+				text: Item2Insert
+			}));
+			alertify.success('Elmento ' + idTipo + ' ' + Item2Insert + " añadido...");
+		}
+	}	 
+}
+
+/** 20170516. AGL. No dejar insertar No duplicados */
 function AddProxy(){
+	Add2Select('#ProxysList', $('#ProxyEdit').val(), 2, 'PROXY');
+	/*
 	if($('#ProxysList')["0"].length != 2) {
 		if ($('#ProxyEdit').val() != ''){
 			alertify.success('Proxy añadido.');
 			$('#ProxysList').append($('<option>',{
+				value: $('#ProxyEdit').val(), 
 				text: $('#ProxyEdit').val()
 			}));
 		}
 	}
 	else
 		alertify.error('Solo se pueden insertar dos proxies para este servicio.');
+		*******************/
 }
 
 function RemoveProxy(){
@@ -1235,7 +1266,10 @@ function RemoveProxy(){
 
 }
 
+/** 20170516. AGL. No dejar insertar No duplicados */
 function AddRegistrar(){
+	Add2Select('#RegistrarsList', $('#RegistrarEdit').val(), 2, 'REGISTRAR');
+	/*
 	if($('#RegistrarsList')["0"].length != 2) {
 		if ($('#RegistrarEdit').val() != '') {
 			alertify.success('Registrar añadido.');
@@ -1246,6 +1280,7 @@ function AddRegistrar(){
 	}
 	else
 		alertify.error('Solo se pueden insertar dos registrars para este servicio.');
+		***************************/
 }
 
 function RemoveRegistrar(){
@@ -1261,7 +1296,15 @@ function RemoveRegistrar(){
 
 }
 
-function AddTrap(){
+/** 20170516. AGL. No dejar insertar No duplicados */
+function AddTrap() {
+	if ($('#TrapIP').val() == '' || $('#TrapPort').val() == '') {
+		alertify.error("Es obligatorio rellenar campos validos para -Direccion IP- y -Puerto-");
+		return;
+	}
+	var Item2Insert = $('#TrapVersion').val() + ',' + $('#TrapIP').val() + '/' + $('#TrapPort').val();
+	Add2Select('#TrapsList', Item2Insert, 4, 'Destinos TRAPS');
+	/*
 	if($('#TrapsList').length == 4 || $('#TrapsList')[0].childNodes.length == 4 ) {
 		translateWord('ErrorNumberTrap',function(result){
 			alertify.error(result);
@@ -1281,6 +1324,7 @@ function AddTrap(){
 			});
 		}
 	}
+	**************************/
 }
 
 function RemoveTrap(){
@@ -1295,7 +1339,10 @@ function RemoveTrap(){
     );
 }
 
+/** 20170516. AGL. No dejar insertar No duplicados */
 function AddServer(){
+	Add2Select('#NtpServersList', $('#ServerEdit').val(), 2, 'NTP SERVER');
+	/*
 	if ($('#ServerEdit').val() != ''){
 		if ($('#NtpServersList option:eq(1)').text().length>0)
 		{
@@ -1308,7 +1355,8 @@ function AddServer(){
 			text: $('#ServerEdit').val()
 		}));
 	}
-	$('#ServerEdit').val('');
+	*************************/
+	$('#ServerEdit').val('');	
 }
 
 function RemoveServer(){
