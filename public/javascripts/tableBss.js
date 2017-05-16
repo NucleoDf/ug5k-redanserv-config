@@ -2,6 +2,8 @@
 /****** Module: tableBss.js												*******************************/
 /****** Description: Módulo de soporte a la gestion de usuarios			*******************************/
 /******************************************************************************************************/
+/** 20170516. AGL Gestor 'Aplicar cambios' */
+var tbbssModified = false;
 
 var GetTablesBss = function(f) {
 	/** 20170511 AGL PERFILES */
@@ -103,6 +105,8 @@ var PostTable = function(){
 					if (data.error == null){
 						if (data.idTable != null){
 							alertify.success('Tabla de calificación ' + $('#IdTable').val() + ' generada.');
+							/** 20170516. AGL. Activar Cambios... */
+							tbbssModified = true;
 							GetTablesBss(function(){
 								GetTable(data.idTable);
 							});
@@ -133,6 +137,8 @@ var PutTable = function(){
 								}),
 			success: function(data){
 					alertify.success('Datos de la tabla \"' +  $('#IdTable').val() + '\" actualizados.');
+					/** 20170516. AGL. Activar Cambios... */
+					tbbssModified = true;
 					GetTablesBss(function(){
 						GetTable($('#FormTableBss').data('idtabla_bss'));
 					});
@@ -158,6 +164,8 @@ var DelTable = function(){
 							else if (data.error == null){
 								GenerateHistoricEvent(ID_HW,REMOVE_CALIFICATION_AUDIO_TABLE,$('#IdTable').val(),$('#loggedUser').text());
 								alertify.success('Tabla \"' +  $('#IdTable').val() + '\" eliminada.');
+								/** 20170516. AGL. Activar Cambios... */
+								tbbssModified = true;
 								GetTablesBss();
 							}
 					}

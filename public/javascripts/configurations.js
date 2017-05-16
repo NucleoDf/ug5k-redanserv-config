@@ -870,7 +870,9 @@ var ActiveCfg = function(){
 };
 
 var GetActiveCfgAndActivate = function(){
-	if (listOfGateways.length > 0){
+	/** 20170516 AGL Este filtro ya no parece tener sentido. Comprobar... */
+	// if (listOfGateways.length > 0)
+	{
 		$.ajax({
 			type: 'GET',
 			url: '/configurations/active',
@@ -899,6 +901,8 @@ var GetActiveCfgAndActivate = function(){
 														AddGatewayToList(null);
 														/** 20170509. AGL Gestor 'Aplicar cambios' en usuarios */
 														usersModified = false;
+														/** 20170516. AGL. Activar Cambios... */
+														tbbssModified = false;														
 														// Generar histórico con cada pasarela que no se pudo configurar
 														// por estar desconectada del servidor
 														if (existe.gateways != null){
