@@ -1343,6 +1343,13 @@ function AddResource(slaveId, col, fila, f){
 	}
 }
 
+/** 20170516 AGL. Validaciones  */
+function localValidateAtsNumber(num) {
+	var regx_atsval = /^[2-3][0-9]{5}$/;
+	var matchVal = num.match(regx_atsval);
+	return matchVal ? true : false;
+}
+
 function UpdateResource(slaveId, col, fila, f) {
 	loadingContent();
 	if($('#SResourceType option:selected').val() == 1) { //Recurso Radio
@@ -1392,6 +1399,20 @@ function UpdateResource(slaveId, col, fila, f) {
 					GotoResource(fila, col, true);
 				}
 			);
+		}
+		/** 20170516. AGL. TEST NUMERO de TEST R2/N5 Rellenos... */
+		else if ($('#LbTypeTel')[0].value == 3 || $('#LbTypeTel')[0].value == 4) {
+			if (localValidateAtsNumber($('#TbLocalNumText').val())==false) {
+				alertify.error("ATS. Debe rellenar el Numero Origen de las Llamadas de Test...");
+				// GotoResource(fila, col, true);
+			}
+			else if (localValidateAtsNumber($('#TbRemoteNumText').val())==false) {
+				alertify.error("ATS. Debe rellenar el Numero Destino de las Llamadas de Test...");
+				// GotoResource(fila, col, true);
+			}
+			else {
+				UpdateResourceReally(slaveId, col, fila, f);
+			}
 		}
 		/*else if ($('#LbTypeTel')[0].value == 3) {//ATS
 			if ($('#rangeAtsOrigin')[0].childNodes["0"].childNodes.length == 6) {
