@@ -305,7 +305,7 @@ var DelConfiguration = function(){
 		alertify.confirm('Ulises G 5000 R', "¿Eliminar la configuración \"" + $('#name').val() + "\".?", 
 			function(){ 
 						$.ajax({type: 'DELETE', 
-						url: '/configurations/' + $('#name').val(),
+						url: '/configurations/' + $('#DivConfigurations').data('idCFG'),
 						success: function(data){
 									if (data.error === 0)
 										alertify.error('La configuración \"'+ data.data + '\" no existe.');
