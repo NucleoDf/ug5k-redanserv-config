@@ -800,17 +800,31 @@ function ShowDataOfResource(data,f){
 		if (f != null)
 			f();
 		
-		if (data.recursos[1].ip == null) {
+		/** 20170517 AGL. El tipo de restriccion almacenada esta en '.restriccion' */
+		if (data.recursos[0],restriccion==0) {
 			$('#SRestriccion option:eq(0)').prop('selected', true);
-		}
-		else if(data.recursos[1].blanca == 0) {
+		} else if (data.recursos[0].restriccion==1) {
 			$('#SRestriccion option:eq(1)').prop('selected', true);
-			OnChangeRestriccion(1);
-		}
-		else {
+			OnChangeRestriccion($('#SRestriccion')[0]);
+		} else if (data.recursos[0].restriccion==2) {
 			$('#SRestriccion option:eq(2)').prop('selected', true);
-			OnChangeRestriccion(2);
+			OnChangeRestriccion($('#SRestriccion')[0]);
 		}
+		// if (data.recursos[1].ip == null) {
+		// 	$('#SRestriccion option:eq(0)').prop('selected', true);
+		// }
+		// else if(data.recursos[1].blanca == 0) {
+		// 	$('#SRestriccion option:eq(1)').prop('selected', true);
+		// 	/** 20170517 AGL Esta llamada se hace con un parámetros incorrecto. */
+		// 	OnChangeRestriccion($('#SRestriccion')[0]);
+		// 	/*OnChangeRestriccion(1);*/
+		// }
+		// else {
+		// 	$('#SRestriccion option:eq(2)').prop('selected', true);
+		// 	/** 20170517 AGL Esta se hace con un parámetros incorrecto. */
+		// 	OnChangeRestriccion($('#SRestriccion')[0]);
+		// 	/*OnChangeRestriccion(2);*/
+		// }
 	}
 }
 
@@ -869,12 +883,19 @@ function RemoveUriFromList(index,f){
 					}
 			});
 			
-			$.ajax({type: 'GET', 
-						url: '/resources/assignedlists/'+rsc+'/'+$('#SRestriccion option:selected').val(), 
-						success: function(data1){
-								LoadAssignedUriList(data1);
-						}
-			});
+			/** 20170517 AGL buscando 'undefined' */
+			var val = $('#SRestriccion option:selected').val();
+			if (val) {
+				$.ajax({type: 'GET', 
+							url: '/resources/assignedlists/'+rsc+'/'+$('#SRestriccion option:selected').val(), 
+							success: function(data1){
+									LoadAssignedUriList(data1);
+							}
+				});
+			}
+			else {
+				if (DEBUG) alertify.error("RemoveUriFromList: #SRestriccion option:selected undefined.");
+			}
 		}, 
 		function(){ alertify.error('Cancelado');}
         );
@@ -896,11 +917,11 @@ function GetListsFromResource(rsc){
 
 function ShowListsFromResource(data){
 	var actualiza='';
-	var cuantos = $('#WhiteBlackList tr').length;
 
+	var cuantos = $('#WhiteBlackList tr').length;
 	for (var i=0;i<cuantos - 1;i++)
-		$('#WhiteBlackList tr:nth-child(1)').remove();
-	
+		$('#WhiteBlackList tr:nth-child(1)').remove();	
+
 	var indice = 0;
 	/** 20170511. AGL. Perfiles */
 	var clase = Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccConfiProfMsc]) == false ? " class='New NotAllowedTd'" : "";
@@ -925,33 +946,31 @@ function ShowListsFromResource(data){
 		actualiza=result;	
 	});
 
+	if (DEBUG) console.log("ShowListFromResources #2: "+ $('#WhiteBlackList tr').length);
 	$.each(data.uris,function(index,value){
 		var encontrado = false;
 		if (value.ip != null){
-/*			$('#WhiteBlackList tr').each(function(){
-				if ($(this).data('idurilistas') == value.idURILISTAS){
-					encontrado = true;
-					return false;
-				}
-			});
-*/
-//			if (!encontrado){
-					translateWord('Remove',function(result){
-						var remove=result;
-						
+
+		if (DEBUG) console.log("ShowListFromResources #3: "+ $('#WhiteBlackList tr').length);
+		
+		/** 20170517 AGL El TraslateWord, difiere la ejecucion de la insercion de filas y 
+		 * provoca que se rellenen por ducplicado al llamada a la fucioncion 2 veces...
+		 */
+		// translateWord('Remove',function(result){
+		//	var remove=result;
+			var remove = "Eliminar";
 							
-						if ($('#SRestriccion option:selected').val() != 0 &&
-							(($('#SRestriccion option:selected').val() == 1 && value.negra==1) ||
-							($('#SRestriccion option:selected').val() == 2 && value.negra==0))){
-							indice++;								
-							$('#WhiteBlackList tr:nth-last-child(1)').before('<tr data-idurilistas=' + value.idURILISTAS + ' style="height:32px">' +
-													'<td align="center">' + value.ip.substring(4) + '</td>' + 
-													'<td align="center" ' + clase +'><a ' + clase_a + 'style="height: 10px;padding-top: 2px;padding-bottom: 2px;"' + ' onclick="RemoveUriFromList(' + indice + ',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))})" >' + remove + '</a></td>' +
-													'</tr>');
-						}
-					});
-//				});
-//			}
+			if ($('#SRestriccion option:selected').val() != 0 &&
+				(($('#SRestriccion option:selected').val() == 1 && value.negra==1) ||
+				($('#SRestriccion option:selected').val() == 2 && value.negra==0))){
+					if (DEBUG) console.log("ShowListFromResources #4: "+ $('#WhiteBlackList tr').length);
+					indice++;								
+					$('#WhiteBlackList tr:nth-last-child(1)').before('<tr data-idurilistas=' + value.idURILISTAS + ' style="height:32px">' +
+												'<td align="center">' + value.ip.substring(4) + '</td>' + 
+												'<td align="center" ' + clase +'><a ' + clase_a + 'style="height: 10px;padding-top: 2px;padding-bottom: 2px;"' + ' onclick="RemoveUriFromList(' + indice + ',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))})" >' + remove + '</a></td>' +
+												'</tr>');
+					}
+				// });
 		}
 	});
 }
@@ -985,12 +1004,19 @@ function AddUriToList(element,f){
 				}
 		});
 		
-		$.ajax({type: 'GET', 
-			url: '/resources/assignedlists/'+rsc+'/'+$('#SRestriccion option:selected').val(), 
-			success: function(data1){
-					LoadAssignedUriList(data1);
-			}
-		});
+		/** 20170517 AGL buscando 'undefined' */
+		var val = $('#SRestriccion option:selected').val();
+		if (val) {
+			$.ajax({type: 'GET', 
+				url: '/resources/assignedlists/'+rsc+'/'+$('#SRestriccion option:selected').val(), 
+				success: function(data1){
+						LoadAssignedUriList(data1);
+				}
+			});
+		}
+		else {
+			if (DEBUG) alertify.error("AddUriToList. #SRestriccion option:selected undefined");
+		}
 	}
 }
 
@@ -1021,13 +1047,19 @@ function RemoveUri(){
 					}
 			});
 			
-			$.ajax({type: 'GET', 
-				url: '/resources/assignedlists/'+rsc+'/'+$('#SRestriccion option:selected').val(), 
-				success: function(data1){
-						LoadAssignedUriList(data1);
-				}
-			});
-
+			/** 20170517 AGL buscando 'undefined' */
+			var val = $('#SRestriccion option:selected').val();
+			if (val) {			
+				$.ajax({type: 'GET', 
+					url: '/resources/assignedlists/'+rsc+'/'+$('#SRestriccion option:selected').val(), 
+					success: function(data1){
+							LoadAssignedUriList(data1);
+					}
+				});
+			}
+			else {
+				if (DEBUG) alertify.error("RemoveUri. #SRestriccion option:selected undefined");
+			}
 		}, 
 		function(){ alertify.error('Cancelado');}
     );
@@ -1088,12 +1120,19 @@ function CommitUri(index){
 				}
 		});
 		
-		$.ajax({type: 'GET', 
-			url: '/resources/assignedlists/'+rsc+'/'+$('#SRestriccion option:selected').val(), 
-			success: function(data1){
-					LoadAssignedUriList(data1);
-			}
-		});
+		/** 20170517 AGL buscando 'undefined' */
+		var val = $('#SRestriccion option:selected').val();
+		if (val) {
+			$.ajax({type: 'GET', 
+				url: '/resources/assignedlists/'+rsc+'/'+$('#SRestriccion option:selected').val(), 
+				success: function(data1){
+						LoadAssignedUriList(data1);
+				}
+			});
+		}
+		else {
+			if (DEBUG) alertify.error("CommitUri. #SRestriccion option:selected. undefined.");
+		}
 	}
 
 	CancelAddUri();
@@ -2501,12 +2540,18 @@ function OnChangeRestriccion(sel){
 		var rsc=$('table.resource').data('idRecurso');
 		GetListsFromResource(rsc);
 		
-		$.ajax({type: 'GET', 
-							url: '/resources/assignedlists/'+rsc+'/'+sel.value, 
-							success: function(data1){
-									LoadAssignedUriList(data1);
-							}
-						});
+		/** 20170517 AGL buscando 'undefined' */
+		if (sel.value) {
+			$.ajax({type: 'GET', 
+								url: '/resources/assignedlists/'+rsc+'/'+sel.value, 
+								success: function(data1){
+										LoadAssignedUriList(data1);
+								}
+							});
+		}
+		else {
+			if (DEBUG) alertify.error("OnChangeRestriccion. sel.value. undefined.");
+		}
 		
 	}
 	else{

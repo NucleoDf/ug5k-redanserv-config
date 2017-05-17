@@ -40,6 +40,9 @@ function Authorize(currentProfile, authorizedProfiles) {
 	return false;
 }
 /************************************************** */
+/** 201705 AGL Control DEBUG */
+var DEBUG = true;
+/*******************************/
 
 script.src = 'http://code.jquery.com/jquery-1.11.2.min.js';
 script.type = 'text/javascript';

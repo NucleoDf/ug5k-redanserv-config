@@ -129,7 +129,7 @@
 	"EnableRegister"		: "Habilitar registro",
 	"UriSip"				: "URI - Sip: ",
 	"AutomaticCall"			: "Llamada automatica",
-	"Restriction"			: "Añadir Restricción: ",
+	"Restriction"			: "Tipo de Restricción: ",
 	"ResourceType"			: "Tipo de recurso",
 	"SelectCodec"			: "Selecciona codec",
 	"AddDestination"		: "Añadir destino",
