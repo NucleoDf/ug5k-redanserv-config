@@ -145,6 +145,7 @@
 	"RemoveServer"			: "Eliminar servidor",
 	"AddServer"				: "Añadir servidor",
 	"RTSPIP"				: "IP SERVIDOR RTSP (A)",
+	"RTSPIPB"				: "IP SERVIDOR RTSP (B)",
 	"RTSPUri"				: "URI RTSP",
 	"ErrorRTSPUri"			: "URI RTSP valor no válido",
 	"RTSPPort"				: "PUERTO SERVIDOR RTSP",

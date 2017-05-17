@@ -180,6 +180,8 @@ var PostGateway = function (f){
 		//"rtsp_uri": $('#rtsp_uri').val(),
 		"rtsp_uri": '',
 		"rtsp_ip": $('#rtsp_ip').val(),
+		/** 20170517. AGL. Segundo Servidor */
+		"rtspb_ip" : $('#rtspb_ip').val(),
 		//"rtsp_rtp": $('#rtp_tramas').prop('checked') ? 1 : 0
 		"rtsp_rtp": 1 
 	};
@@ -1503,6 +1505,8 @@ function RenderRecordingService(grab,visible){
 	$('#rtsp_port').val(grab.rtsp_port);
 	//$('#rtsp_uri').val(grab.rtsp_uri);
 	$('#rtsp_ip').val(grab.rtsp_ip);
+	/** 20170517 AGL. Segundo Grabador */
+	$('#rtspb_ip').val(grab.rtspb_ip);
 	//$('#rtp_tramas').prop('checked', grab.rtsp_rtp ? 1 : 0);
 }
 
