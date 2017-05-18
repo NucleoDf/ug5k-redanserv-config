@@ -123,11 +123,12 @@ div(id="FormConfiguration", style="display: none; width: 350px")
 							tr
 								td.New(style='padding-top: 15px' colspan=5)
 									.content.fadeFormNucleo#AssignatedGatewaysDiv(style='height: 280px;width: 672px')
+										// 20170518. AGL. Eliminada la opcion de otras pasarelas diferentes a la de la configuracion
 										table(style='width: inherit;table-layout:fixed')
 											tr(align='center')
-												td(style='width:50%')
+												td(style='width:100%')
 													label#LblGatewaysInCfg.labelNucleo(tkey='GatewaysInCfg')
-												td(style='width:50%')
+												td.hide(style='width:50%')
 													label.labelNucleo Ver todas las pasarelas
 													input#CBViewFreeGateways(type='checkbox' onclick='ClickViewFreeGateways()')
 											tr(align='center')
@@ -136,9 +137,9 @@ div(id="FormConfiguration", style="display: none; width: 350px")
 												td#CBFreeGatewaysRow
 													select#CBFreeGateways(type = 'select' style='width:220px;display:none' onchange='ClickCBFreeGateways()')
 														option(value=0 tkey='AliveGateways')
-											tr(align='center')
-												td.New#freeGatewaysListRow
-													ul.list#freeGatewaysList(style='width:310px;height:207px;margin-left:0;display:none' ondrop="dropFreeGateway(event)" ondragover="allowDrop(event)")
+											//- tr(align='center')
+											//- 	td.New#freeGatewaysListRow
+											//- 		ul.list#freeGatewaysList(style='width:310px;height:207px;margin-left:0;display:none' ondrop="dropFreeGateway(event)" ondragover="allowDrop(event)")
 
 							tr
 								td.New(style='padding-top: 15px' colspan=5)
