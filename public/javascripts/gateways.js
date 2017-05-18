@@ -10,6 +10,17 @@ var cicloCompleto = 0;
 var link_enlaces = [];
 var link_enlaces_libres = [];
 
+/** 20170518 AGL Devuelve la CFG propia de la lista de emplazamientos */
+function Site2Config(mySite, sites) {
+	var cfgName = "";
+	$.each(sites, function(index, value){
+		if (mySite == sites[index].idEMPLAZAMIENTO) {
+			cfgName = sites[index].nameCfg;
+		}
+	});
+	return cfgName;
+}
+
 var ChangeGateWaySite = function(data){
 	var oldIndex = data[data.oldValue].value;
 	var newIndex = data[data.selectedIndex].value;
@@ -1439,11 +1450,29 @@ function loadSiteList(data, gtwSite){
 	// Load proxys list
 	$('#ListSites').empty();
 	var options = '';
+	var currentCfg = Site2Config(gtwSite, data);
+
 	for (var i = 0; i < data.length; i++) {
-		if(data[i].idEMPLAZAMIENTO === gtwSite)
-			options += '<option selected="true" value="' + data[i].idEMPLAZAMIENTO + '">' + data[i].nameCfg + '-' + data[i].name + '</option>';
-		else
-			options += '<option value="' + data[i].idEMPLAZAMIENTO + '">' + data[i].nameCfg + '-' + data[i].name + '</option>';
+		
+		if(data[i].idEMPLAZAMIENTO === gtwSite) {
+				if (optGWMOVE_BETWEENCFG == true) {
+					options += '<option selected="true" value="' + data[i].idEMPLAZAMIENTO + '">' + data[i].nameCfg + '-' + data[i].name + '</option>';
+				}
+				else {
+					options += '<option selected="true" value="' + data[i].idEMPLAZAMIENTO + '">' + data[i].name + '</option>';
+				}
+		}
+		else {
+			/** 20170518 AGL Opcion de Mover Pasarelas entre configuraciones */
+				if (optGWMOVE_BETWEENCFG == false) {
+					if (data[i].nameCfg != currentCfg)
+						continue;
+				options += '<option value="' + data[i].idEMPLAZAMIENTO + '">' + data[i].name + '</option>';
+			}
+			else {
+				options += '<option value="' + data[i].idEMPLAZAMIENTO + '">' + data[i].nameCfg + '-' + data[i].name + '</option>';
+			}
+		}
 	}
 	$('#ListSites').html(options);
 	//$('#ListSites').refresh();

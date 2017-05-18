@@ -43,6 +43,9 @@ function Authorize(currentProfile, authorizedProfiles) {
 /** 201705 AGL Control DEBUG */
 var DEBUG = true;
 /*******************************/
+/** 20170518 AGL Opcion Filtrar SITES a la propia config para mover pasarelas */
+var optGWMOVE_BETWEENCFG = false;
+/****************************************************************************/
 
 script.src = 'http://code.jquery.com/jquery-1.11.2.min.js';
 script.type = 'text/javascript';
