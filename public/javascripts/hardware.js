@@ -1250,6 +1250,8 @@ function AddResource(slaveId, col, fila, f){
 													$('.Res' + fila + col).data('idResource',data.data.idRECURSO);
 													GetResource(data.data.idRECURSO,function(){
 														$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))})");
+														/** 20170518 AGL  */
+														$( "#SResourceType" ).prop( "disabled", true );
 														
 														$('#FormParameters').show();
 														$('#BtnRemoveResource').show();
@@ -1306,6 +1308,8 @@ function AddResource(slaveId, col, fila, f){
 												$('.Res' + fila + col).data('idResource',data.data.idRECURSO);
 												GetResource(data.data.idRECURSO,function(){
 													$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))})");
+													/** 20170518 AGL  */
+													$( "#SResourceType" ).prop( "disabled", true );
 													
 													$('#FormParameters').show();
 													$('#BtnRemoveResource').show();
@@ -1340,7 +1344,9 @@ function AddResource(slaveId, col, fila, f){
 											$('.Res' + fila + col).data('idResource',data.data.idRECURSO);
 											GetResource(data.data.idRECURSO,function(){
 												$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))}); AddPhoneParameters()");
-												
+												/** 20170518 AGL  */
+												$( "#SResourceType" ).prop( "disabled", true );
+
 												$('#FormParameters').show();
 												$('#BtnRemoveResource').show();
 												
