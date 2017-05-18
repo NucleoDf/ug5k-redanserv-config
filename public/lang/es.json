@@ -19,7 +19,7 @@
 	"PerfilGestionConfLocal": "GW Local. Gestion Configuraciones",
 	"PerfilActualizacionSw" : "RCS. Actualización SW de GWs",
 	"PerfilConfiguraciones" : "C.Central. Gestión Configuraciones",
-	"PerfilCargaConfiguraciones" : "C.Central. Carga Configuraciones",
+	"PerfilCargaConfiguraciones" : "C.Central. Gestion/Carga Configuraciones",
 	"SelectProfile"			: "Seleccione perfil",
 	"AccessLevel"			: "Nivel de acceso",
 	"OperatorId"			: "Id. operador",

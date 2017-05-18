@@ -216,7 +216,7 @@ var GetUsuario = function (ind,valor){
 
 /** AGL... *************************************/					
 					$('#DivOperador').animate({width: '1000px'});
-					$('#DatosUsuario').animate({width: '410px'});
+					$('#DatosUsuario').animate({width: '430px'});
 					$('#GatewayToOp').hide();
 					$('#IdOperador').prop( "disabled", true );
 /*
@@ -262,7 +262,7 @@ var GetUsuario = function (ind,valor){
 		$('#FormOperador').show();
 		$('#DivOperador').animate({width: '1000px'});
 		/** AGL */
-		$('#DatosUsuario').animate({width: '410px'});
+		$('#DatosUsuario').animate({width: '430px'});
 		$('#IdOperador').prop( "disabled", false );
 		/*****************/
 		translateWord('Add',function(result){
