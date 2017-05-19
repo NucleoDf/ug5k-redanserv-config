@@ -280,6 +280,10 @@ html
 				this.document.location.reload();
 			}
 
+			function restoreInfo() {
+				alertify.alert("Informacion", "Para Restaurar la Base de Datos, consultar 'ULISES G 5000-REDAN. Configuracion Remota. Manual de Usuario.docx' Punto 6.2.");
+			}
+
 		table(style='width:100%')
 			tr
 				td(style='width:15%')
@@ -437,6 +441,8 @@ html
 										a(onclick="CheckingAnyChange(\'GeneralContent\', function(){hidePreviousBackup(\'#FormLogs\',\'#AddFormLogsBackup\',\'#DivLogs\'); PageLog=0; GetLogsBackup()})" tkey='LogsManagement')
 									li
 										a(onclick="CheckingAnyChange(\'GeneralContent\', function(){hidePreviousBackup(\'#FormHandBackup\',\'#AddFormHandBackup\',\'#DivHandBackup\'); GetHandBackup()})" tkey='HandBackup')
+									li
+										a(onclick="restoreInfo()" tkey='HandRestore')
 									li(style='margin-top:199px')
 										a( onclick="CheckingAnyChange(\'GeneralContent\', function(){hide()})", tkey='Exit') 
 						td#Backups(rowspan=2)

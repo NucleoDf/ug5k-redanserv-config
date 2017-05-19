@@ -41,7 +41,7 @@ function LoadUri(data){
 		}
 		$('#ListUris').html(options);
 		$('#ListUris option:eq(1)');
-	}
+	} else if (DEBUG) alertify.error("Lista URIS vacia...");
 }
 
 function LoadAssignedUriList(data){
@@ -801,7 +801,7 @@ function ShowDataOfResource(data,f){
 			f();
 		
 		/** 20170517 AGL. El tipo de restriccion almacenada esta en '.restriccion' */
-		if (data.recursos[0],restriccion==0) {
+		if (data.recursos[0].restriccion==0) {
 			$('#SRestriccion option:eq(0)').prop('selected', true);
 		} else if (data.recursos[0].restriccion==1) {
 			$('#SRestriccion option:eq(1)').prop('selected', true);
@@ -908,21 +908,15 @@ function RemoveUriFromList(index,f){
  */
 function GetListsFromResource(rsc){
 	$.ajax({type: 'GET', 
-					url: '/resources/'+rsc+'/lists', 
-					success: function(data){
-						ShowListsFromResource(data);
-					}
+			url: '/resources/'+rsc+'/lists', 
+			success: function(data) {
+				ShowListsFromResource(data);
+			}
 	});
 }
 
-function ShowListsFromResource(data){
-	var actualiza='';
+function ShowListsFromResource(data) {
 
-	var cuantos = $('#WhiteBlackList tr').length;
-	for (var i=0;i<cuantos - 1;i++)
-		$('#WhiteBlackList tr:nth-child(1)').remove();	
-
-	var indice = 0;
 	/** 20170511. AGL. Perfiles */
 	var clase = Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccConfiProfMsc]) == false ? " class='New NotAllowedTd'" : "";
 	var clase_a = Authorize($('#BodyRedan').data('perfil'),[ccAdminProfMsc,ccConfiProfMsc]) == false ? " class='ButtonNucleo NotAllowedBtn'" : "class='ButtonNucleo'";
@@ -932,47 +926,87 @@ function ShowListsFromResource(data){
 	var clase_ = ($('#BodyRedan').data('perfil') & 1) == 1 ? " class='NotAllowedBtn'" : "";
 	******************************************/
 
+	// Borrar la tabla
+	var cuantos = $('#WhiteBlackList tr').length;
+	for (var i=0;i<cuantos - 1;i++)
+		$('#WhiteBlackList tr:nth-child(1)').remove();	
+
 	if (data == 'NO_DATA')
 		return;
 
-	if (data.uris.length >= 8){
+
+	/** 20170519 AGL. Establezco bien los limites */
+	var tipo = $('#SRestriccion option:selected').val();	// 0: None, 1: L.Negra, 2: L.Blanca
+	var count_tipo=0;
+	var indice = 0;
+	$.each(data.uris,function(index,value){
+		var encontrado = false;
+		if (value.ip != null && tipo != 0) {
+		/** 20170517 AGL El TraslateWord, difiere la ejecucion de la insercion de filas y 
+		 * provoca que se rellenen por ducplicado al llamada a la fucioncion 2 veces...
+		 */
+			var remove = "Eliminar";							
+			if ( (value.negra==0 && tipo==2) || (value.negra==1 && tipo==1)) {
+				indice++;								
+				$('#WhiteBlackList tr:nth-last-child(1)').before('<tr data-idurilistas=' + value.idURILISTAS + ' style="height:32px">' +
+										'<td align="center">' + value.ip.substring(4) + '</td>' + 
+										'<td align="center" ' + clase +'><a ' + clase_a + 'style="height: 10px;padding-top: 2px;padding-bottom: 2px;"' + ' onclick="RemoveUriFromList(' + indice + ',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))})" >' + remove + '</a></td>' +
+										'</tr>');
+				count_tipo++;
+			}
+		}
+	});
+	
+	if (count_tipo >= 8){
 		$('#AddUriRow').hide();
 	}
 	else{
 		$('#AddUriRow').show();
 	}
 
-	translateWord('Update',function(result){
-		actualiza=result;	
-	});
+	// /* */
+	// var actualiza='';
+	// var indice = 0;
+	// if (data == 'NO_DATA')
+	// 	return;
+	// if (data.uris.length >= 8){
+	// 	$('#AddUriRow').hide();
+	// }
+	// else{
+	// 	$('#AddUriRow').show();
+	// }
+	// translateWord('Update',function(result){SHow
+	// 	actualiza=result;	
+	// });
 
-	if (DEBUG) console.log("ShowListFromResources #2: "+ $('#WhiteBlackList tr').length);
-	$.each(data.uris,function(index,value){
-		var encontrado = false;
-		if (value.ip != null){
+	// if (DEBUG) console.log("ShowListFromResources #2: "+ $('#WhiteBlackList tr').length);
+	// $.each(data.uris,function(index,value){
+	// 	var encontrado = false;
+	// 	if (value.ip != null){
 
-		if (DEBUG) console.log("ShowListFromResources #3: "+ $('#WhiteBlackList tr').length);
+	// 	if (DEBUG) console.log("ShowListFromResources #3: "+ $('#WhiteBlackList tr').length);
 		
-		/** 20170517 AGL El TraslateWord, difiere la ejecucion de la insercion de filas y 
-		 * provoca que se rellenen por ducplicado al llamada a la fucioncion 2 veces...
-		 */
-		// translateWord('Remove',function(result){
-		//	var remove=result;
-			var remove = "Eliminar";
+	// 	/** 20170517 AGL El TraslateWord, difiere la ejecucion de la insercion de filas y 
+	// 	 * provoca que se rellenen por ducplicado al llamada a la fucioncion 2 veces...
+	// 	 */
+	// 	// translateWord('Remove',function(result){
+	// 	//	var remove=result;
+	// 		var remove = "Eliminar";
 							
-			if ($('#SRestriccion option:selected').val() != 0 &&
-				(($('#SRestriccion option:selected').val() == 1 && value.negra==1) ||
-				($('#SRestriccion option:selected').val() == 2 && value.negra==0))){
-					if (DEBUG) console.log("ShowListFromResources #4: "+ $('#WhiteBlackList tr').length);
-					indice++;								
-					$('#WhiteBlackList tr:nth-last-child(1)').before('<tr data-idurilistas=' + value.idURILISTAS + ' style="height:32px">' +
-												'<td align="center">' + value.ip.substring(4) + '</td>' + 
-												'<td align="center" ' + clase +'><a ' + clase_a + 'style="height: 10px;padding-top: 2px;padding-bottom: 2px;"' + ' onclick="RemoveUriFromList(' + indice + ',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))})" >' + remove + '</a></td>' +
-												'</tr>');
-					}
-				// });
-		}
-	});
+	// 		if ($('#SRestriccion option:selected').val() != 0 &&
+	// 			(($('#SRestriccion option:selected').val() == 1 && value.negra==1) ||
+	// 			($('#SRestriccion option:selected').val() == 2 && value.negra==0))){
+	// 				if (DEBUG) console.log("ShowListFromResources #4: "+ $('#WhiteBlackList tr').length);
+	// 				indice++;								
+	// 				$('#WhiteBlackList tr:nth-last-child(1)').before('<tr data-idurilistas=' + value.idURILISTAS + ' style="height:32px">' +
+	// 											'<td align="center">' + value.ip.substring(4) + '</td>' + 
+	// 											'<td align="center" ' + clase +'><a ' + clase_a + 'style="height: 10px;padding-top: 2px;padding-bottom: 2px;"' + ' onclick="RemoveUriFromList(' + indice + ',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))})" >' + remove + '</a></td>' +
+	// 											'</tr>');
+	// 				}
+	// 			// });
+	// 	}
+	// });
+
 }
 
 function AddUriToList(element,f){
@@ -1196,7 +1230,7 @@ function AddResource(slaveId, col, fila, f){
 	// Permitir dar de alta recursos solo si tiene un identificador
 	// y tiene asignada una frecuencia si es de tipo radio.
 	
-	if ($('#TbNameResource').val().length > 0){
+	if ($('#TbNameResource').val().length > 0) {
 		$.ajax({
 			type: 'GET',
 			//url: '/gateways/' + $('#Component').text() + '/services/' + serviceId,
@@ -1209,11 +1243,11 @@ function AddResource(slaveId, col, fila, f){
 				else {
 					if((($('#SResourceType option:selected').val() != 1) || $('#IdDestination').val() != '')){
 						// Comprobar si la slave existe
-						if (idSlave == ''){
+						if (idSlave == '') {
 							////////////////////////
 							// La slave no existe //
 							////////////////////////
-							AddSlave($('#IdSite').data('gatewayName'),col,function(data){
+							AddSlave($('#IdSite').data('gatewayName'),col,function(data) {
 								idSlave = data;
 								$.ajax({type: 'POST',
 									dataType: 'json',
@@ -1230,7 +1264,7 @@ function AddResource(slaveId, col, fila, f){
 										szClave: $('#TbKey').val(),
 										LlamadaAutomatica: $('#CbLlamadaAutomatica').prop('checked')
 									}),
-									success: function(data){
+									success: function(data) {
 										if (data.error === null) {
 											if ($('#SResourceType option:selected').val() == 1)	{
 												// Radio
@@ -1248,7 +1282,7 @@ function AddResource(slaveId, col, fila, f){
 													
 													//GetMySlaves();
 													$('.Res' + fila + col).data('idResource',data.data.idRECURSO);
-													GetResource(data.data.idRECURSO,function(){
+													GetResource(data.data.idRECURSO,function() {
 														$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))})");
 														/** 20170518 AGL  */
 														$( "#SResourceType" ).prop( "disabled", true );
@@ -1269,7 +1303,7 @@ function AddResource(slaveId, col, fila, f){
 											alertify.error('El recurso \"' + data.data.name + '\" ya existe.');
 										}
 									},
-									error: function(data){
+									error: function(data) {
 										alertify.error('El recurso \"' + data.data.name + '\" no existe.');
 									}
 								});
@@ -1310,6 +1344,15 @@ function AddResource(slaveId, col, fila, f){
 													$('#ButtonCommit').attr('onclick',"UpdateResource('" + $('.Slave'+ col).data('idSLAVE') + "','" + col + "','" + fila + "',function(){AddGatewayToList($(\'#DivGateways\').data(\'idCgw\'))})");
 													/** 20170518 AGL  */
 													$( "#SResourceType" ).prop( "disabled", true );
+
+													/** 20170519 AGL Para asegurar lista uris llenas  */
+													$.ajax({type: 'GET', url: '/resources/lists', success: 
+														function(data){
+															LoadUri(data);
+														}
+													});
+													/**************************************** */
+
 													
 													$('#FormParameters').show();
 													$('#BtnRemoveResource').show();

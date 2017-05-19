@@ -286,6 +286,7 @@
 	"SetupBackup"			: "Parameters",
 	"LogsManagement"		: "Logs management",
 	"HandBackup"			: "Hand backup",
+	"HandRestore"			: "Restaurar",
 	"BackupTimestamp"		: "Backup timestamp",
 	"Path"					: "Path",
 	"Hour"					: "Hour",

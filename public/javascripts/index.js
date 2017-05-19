@@ -27,7 +27,7 @@ var ccUsersProfMsc= 0x0010;
 var ccAdminProfMsc= 0x0040;
 var ccHistoProfMsc= 0x0200;
 var ccBackpProfMsc= 0x0400;
-var ccConfiProfMsc= 0x4000;
+var ccConfiProfMsc= 0x8000;					// 0x4000 Se ha eliminado. Se asimila al siguiente....
 var ccLoadcProfMsc= 0x8000;
 function Authorize(currentProfile, authorizedProfiles) {
 	if (!currentProfile || !authorizedProfiles )
