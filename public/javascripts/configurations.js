@@ -970,6 +970,88 @@ function getBase64Image(img) {
   return dataURL.replace(/^data:image\/(png|jpg);base64,/, "");
 }
 
+/** 20170522 AGL Export to CSV */
+var resSubtipoString = function(tipo, subtipo) {
+	if (tipo == 1) {
+		var subtiposradio = ["Local-Simple", "Local-P/R", "Local FD-Simple", "Local FD-P/R",
+		"Remoto RxTx", "Remoto Tx", "Remoto Rx"];
+		return subtipo < 7 ? subtiposradio[subtipo] : "????";
+	}
+	if (tipo == 2) {
+		var subtipostel = ["PP-BL","PP-BC","PP-AB","ATS-R2","ATS-N5","LCEN","ATS-QSIG","TUN-LOC","TUN-REM"];
+		return subtipo < 9 ? subtipostel[subtipo] : "????";
+	}
+	return "????";
+}
+var resColateralString = function(tipo, subtipo, reg) {
+	if (tipo==1) {
+		switch(subtipo){
+			case 0:	// Simple
+			case 2:	// FD Simple
+				return ";" + 
+					   (reg.uriTxA != null ? reg.uriTxA : '') + ";" +
+					   (reg.uriRxA != null ? reg.uriRxA : '') + ";;"
+			case 1:
+			case 3:
+				return ";" +
+					   (reg.uriTxA != null ? reg.uriTxA : '') + ";" +
+					   (reg.uriTxB != null ? reg.uriTxB : '') + ";" +
+					   (reg.uriRxA != null ? reg.uriRxA : '') + ";" +
+					   (reg.uriRxB != null ? reg.uriRxB : '');
+			case 4:
+			case 5:
+			case 6:
+				return ";;;;";
+			default:
+				return ";????;????;????;????";
+		}
+	}
+	if (tipo==2) {
+		return reg.uri_remota + ";;;;";
+	}
+	return "????;????;????;????;????";
+}
+var ExportCfgToExcel = function(idCfg, empl) {
+	GenerateData(idCfg, function(result){
+		var rows = result.result[0];
+		var cfgName = "";
+		var csvData = "Configuracion;"+
+					  // "Emplazamiento;"+
+					  "Pasarela;"+
+					  "Slot;"+
+					  "Posicion;"+
+					  "Recurso;"+
+					  "Tipo;"+
+					  "Subtipo;"+
+					  "Colateral TEL;"+
+					  "Colateral TxA;"+
+					  "Colateral RxA;"+
+					  "Colateral TxB;"+
+					  "Colateral RxB\r\n";
+		$.each(rows, function(index, reg){
+			var item = (reg.cfg_name + ";") +
+				// empl.toString() + ";" + 
+				(reg.cgw_name + ";") +
+				(reg.slave + ";") +
+				(reg.posicion + ";") + 
+				(reg.resource_name + ";") + 
+				(reg.resource_tipo==1 ? "RADIO;" : reg.resource_tipo==2 ? "TELEFONICO;" : "????;") +
+				(resSubtipoString(reg.resource_tipo, 
+					reg.resource_tipo==1 ? reg.tipo_rad : reg.tipo_tel) + ";") +
+				(resColateralString(reg.resource_tipo, 
+					reg.resource_tipo==1 ? reg.tipo_rad : reg.tipo_tel, reg) + ";") +
+				"\r\n";
+			csvData += item;
+			cfgName = reg.cfg_name;
+		});
+
+		var myLink=document.createElement('a');
+		myLink.download = 'Cfg_' + cfgName +'_InformeCfg.csv';
+		myLink.href = "data:application/csv," + escape(csvData);
+		myLink.click();		
+	});
+}
+
 var ExportCfgToPdf = function(idCfg){
 	// Llamar al SP para generar la tabla con los datos necesarios
 	GenerateData(idCfg,function(result){
