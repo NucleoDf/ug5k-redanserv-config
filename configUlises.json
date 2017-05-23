@@ -4,7 +4,7 @@
     "LoginTimeOut": 0,
     "Region": "Región Centro",
     "BackupServiceDomain": "192.168.0.212:8082",
-    "Version": "1.0",
+    "Version": "2.0",
     "SubVersion": "1",
     "Date": "05/05/2017",
     "NodeJS": "6.9.5",
