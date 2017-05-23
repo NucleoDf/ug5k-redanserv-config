@@ -1,0 +1,39 @@
+{
+  "Ulises": {
+    "HistoricsDeep": 30,
+    "LoginTimeOut": 0,
+    "Region": "Región Centro",
+    "BackupServiceDomain": "192.168.0.212:8082",
+    "Version": "1.0",
+    "SubVersion": "1",
+    "Date": "05/05/2017",
+    "NodeJS": "6.9.5",
+    "MySQL": "5.7.17",
+    "Files": [
+      {"Name": "configUlises.json","Path": "/" },
+      {"Name": "app.js", "Path": "/" },
+      {"Path": "/lib/", "Name":"authentication.js"},
+      {"Path": "/lib/", "Name":"configurations.js"},
+      {"Path": "/lib/", "Name":"gateways.js"},
+      {"Path": "/lib/", "Name":"hardware.js"},
+      {"Path": "/lib/", "Name":"historics.js"},
+      {"Path": "/lib/", "Name":"loggingDate.js"},
+      {"Path": "/lib/", "Name":"radioDestinations.js"},
+      {"Path": "/lib/", "Name":"resources.js"},
+      {"Path": "/lib/", "Name":"services.js"},
+      {"Path": "/lib/", "Name":"sites.js"},
+      {"Path": "/lib/", "Name":"tableBss.js"},
+      {"Path": "/lib/", "Name":"users.js"},
+      {"Path": "/lib/", "Name":"version.js"}
+    ],
+	"dbhost" : "localhost",
+	"dbuser" : "root",
+	"dbpassword" : "U5K-G",
+	"dbdatabase" : "ug5k",
+	"log2file" : false,
+	"logfile_path": "./logs/ug5kserv.log",
+	"logfile_maxfiles": 4,
+	"logfile_sizefile": 10000000,
+	"log2con"  : true
+  }
+}
