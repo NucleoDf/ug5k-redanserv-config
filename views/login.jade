@@ -1,0 +1,50 @@
+doctype html
+html
+
+	head
+		title="Ulises G 5000 R"
+		link(rel='stylesheet', href='/stylesheets/style.css')
+		link(rel="stylesheet", href="/alertifyjs/css/alertify.min.css")
+		link(rel="stylesheet", href="/alertifyjs/css/themes/semantic.css")
+
+	body
+		div(style='width:100%')
+			table(style='width:100%')
+				tr
+					td(style='width:15%')
+						#_contSupIzq.divCabeceraNucleo
+							#_logo
+								img#imgLogo(src="images/nucleo-df-new.jpg")
+					td(style='width:60%')
+						#_tit_ppal.divCabeceraNucleo
+							h1(style='text-align:center') ULISES G 5000 R
+							h2 #{region}						
+
+					td(style='width:25%')
+						.divCabeceraNucleo
+
+			form(action='/login' method='post', style='width: 40%; margin-left: 30%; margin-top: 7em; margin-bottom: 3em;')
+				div.divNucleo			
+					h3(style='margin-top: 0px') Control de Acceso
+					table(style='width:100%')
+						tr(align='center')
+							td
+								label.labelNucleo Usuario
+							td
+								input(type="text", class="textbox", id="Operador", name="username", placeholder="Nombre del operador", style="width: 10em" autofocus)
+						tr(align='center')
+							td
+								label.labelNucleo Clave
+							td
+								input(name='password', type="password", class="textbox", id="TextClave", placeholder="Clave", style='width: 10em')
+						tr(align='center')
+							td(colspan=2)
+								p #{message}
+						tr(align='center')
+							td(colspan=2)
+								div(style='padding-top:1.5em')
+									input.ButtonNucleo(type="submit", value="Login")
+
+			div.divNucleo(style='margin-top: 10px;')
+				footer.footerNucleo#_pieExtern DF Nucleo Copyright ©2017. Todos los Derechos Reservados.
+				footer.footerNucleo#hVersion
