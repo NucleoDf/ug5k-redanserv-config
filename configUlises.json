@@ -1,10 +1,10 @@
 {
   "Ulises": {
     "HistoricsDeep": 30,
-    "LoginTimeOut": 0,
+    "LoginTimeOut": 30,
     "Region": "Región Centro",
     "BackupServiceDomain": "192.168.0.212:8082",
-    "Version": "2.0",
+    "Version": "1.0",
     "SubVersion": "1",
     "Date": "05/05/2017",
     "NodeJS": "6.9.5",
@@ -28,12 +28,13 @@
     ],
 	"dbhost" : "localhost",
 	"dbuser" : "root",
-	"dbpassword" : "U5K-G",
+	"dbpassword" : "cd40",
 	"dbdatabase" : "ug5k",
-	"log2file" : false,
+	"log2file" : true,
 	"logfile_path": "./logs/ug5kserv.log",
 	"logfile_maxfiles": 4,
-	"logfile_sizefile": 10000000,
-	"log2con"  : true
+	"logfile_sizefile": 1000000,
+	"log2con"  : true,
+  "morgan" : false
   }
 }

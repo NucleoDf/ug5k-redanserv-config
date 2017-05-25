@@ -2,7 +2,8 @@
 docs/
 examples/
 tests/
-src/browser-extensions/
-build/
-.DS_Store
-
+test-env/
+yarn.lock
+composer.json
+bower.json
+.travis.yml

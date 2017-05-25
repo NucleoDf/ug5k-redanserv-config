@@ -4,6 +4,22 @@ html
 	head
 		title="Ulises G 5000 R"
 		link(rel='stylesheet', href='/stylesheets/style.css')
+		link(rel="stylesheet", href="/alertifyjs/css/alertify.min.css")
+		link(rel="stylesheet", href="/alertifyjs/css/themes/semantic.css")
+
+		script(type='text/javascript' src='/javascripts/jquery-1.11.2.min.js')
+		script(type='text/javascript' src='/translator/lang.js')
+		script(type='text/javascript' src='/javascripts/users.js')
+		script(type='text/javascript' src='/javascripts/gateways.js')
+		script(type='text/javascript' src='/javascripts/configurations.js')
+		script(type='text/javascript' src='/javascripts/hardware.js')
+		script(type='text/javascript' src='/javascripts/parametersRadio.js')
+		script(type='text/javascript' src='/javascripts/parametersTel.js')
+		script(type='text/javascript' src='/javascripts/sites.js')
+		script(type='text/javascript' src='/javascripts/radioDestinations.js')
+		script(type='text/javascript' src='/javascripts/index.js')
+		script(type='text/javascript' src='/alertifyjs/alertify.min.js')
+
 		script(type='text/javascript' src='/javascripts/historics.js')
 		script(type='text/javascript' src='/javascripts/backups.js')
 		script(type='text/javascript' src='/pdfmake/pdfmake.min.js')
@@ -30,7 +46,10 @@ html
 			var PageLog;
 
 			window.onbeforeunload = function () {
-				authentication();
+				/** 20170522 AGL No se porque esta esto. Hace que funcione mal el 
+					LOGIN / LOGOUT  De momento lo elimino */
+				/* authentication();
+				***************************/
 			};
 
 			function SetRegion(){
@@ -313,7 +332,7 @@ html
 									#hora
 										h4#_hsolohora.labelNucleo(style='margin-top: 0px;margin-bottom: 0px')
 								td(style='width:15%')
-									a.ButtonNucleo#buttonLogout(style='display:none' onclick="Logout();checkCookie = false;document.cookie = 'U5K-G=; expires=Thu, 01 Jan 1970 00:00:00 UTC';") Logout
+									a.ButtonNucleo#buttonLogout(style='display:none' onclick="LogoutUser();checkCookie = false;document.cookie = 'U5K-G=; expires=Thu, 01 Jan 1970 00:00:00 UTC';") Logout
 
 	body#BodyRedan(onload='$("#BodyRedan").data("actualLocation",window.location.href);startTime();translateForm();loadPendingChanges()' onmousemove='RefreshCookie()')
 		.divNucleo.logoDF(style='height:780px') 

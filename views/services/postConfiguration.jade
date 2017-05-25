@@ -12,6 +12,10 @@ script.
 						//UpdateSynchroStateInGateways(data);
 						UpdateSynchroStateInSites(data);
 					}
+					else {
+						/** 20170515 AGL. La session ha expirado.....*/
+						$(location).attr('href', '/login');
+					}
 				}
 		});
 

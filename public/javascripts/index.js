@@ -39,6 +39,87 @@ function Authorize(currentProfile, authorizedProfiles) {
 	}
 	return false;
 }
+
+function indexInitUserData(username, userprofile) {
+	var perfilVisualizacion        = ((userprofile & visualProfMsc) ? true : false);
+	var perfilGestUsuarios         = ((userprofile & ccUsersProfMsc)? true : false);
+	var perfilAdministracion       = ((userprofile & ccAdminProfMsc)? true : false);
+	var perfilHistoricos           = ((userprofile & ccHistoProfMsc)? true : false);
+	var perfilBackup               = ((userprofile & ccBackpProfMsc)? true : false);
+	var perfilConfiguraciones      = ((userprofile & ccConfiProfMsc)? true : false);
+	var perfilCargaConfiguraciones = ((userprofile & ccLoadcProfMsc)? true : false);
+
+	if (!perfilVisualizacion && 
+		!perfilGestUsuarios && 
+		!perfilAdministracion && 
+		!perfilHistoricos && 
+		!perfilBackup && 
+		!perfilConfiguraciones &&
+		!perfilCargaConfiguraciones) {
+			// $('#LoginIncorrect').show();
+			// GenerateHistoricEvent(ID_HW,ACCESS_SYSTEM_FAIL,$('#Operador').val());
+			// TODO... Logout, mensaje e Histórico.
+			return;
+		}
+
+	GetVersion(true);		//Obtiene la versión para el footer al ser primera carga
+
+	// Fijar region en el titulo
+	SetRegion();
+					
+	// Register cookie TODO !!!!
+	SetCookie('U5K-G',userprofile);
+					
+	$('#buttonLogout').show();
+					
+	// Hidden fields to render import.jade
+	$('#user').val(username);
+	$('#clave').val($('#Clave').val());
+	$('#perfil').val(userprofile);
+
+	$('#Login-Operador').hide();
+	$('#loggedUser').text(username);
+
+	/** 20170511 AGL. PERFILES. */
+	$('#MenuGeneral').attr('style','display:table-cell;width:11%');
+	$('#MenuGeneral').removeClass('menuListDisabled')
+	$('#MenuOpciones').removeClass('menuListDisabled');
+
+	$('.New').addClass('NotAllowedTd');
+	$('.New *:first-child').addClass('NotAllowedBtn');
+
+	if (Authorize(userprofile,[ccAdminProfMsc,visualProfMsc,ccUsersProfMsc,ccConfiProfMsc,ccLoadcProfMsc])==false) {
+		$('#mgCfg').hide();
+	}
+	if (Authorize(userprofile,[ccAdminProfMsc,ccHistoProfMsc])==false) {
+		$('#mgHis').hide();
+		}
+	if (Authorize(userprofile,[ccAdminProfMsc,ccBackpProfMsc])==false) {
+		$('#mgBkp').hide();
+	}
+	if (Authorize(userprofile,[ccAdminProfMsc,visualProfMsc,ccConfiProfMsc,ccLoadcProfMsc])==false) {
+		$('#cfCfg').hide();
+	}
+	if (Authorize(userprofile,[ccAdminProfMsc,ccUsersProfMsc])==false) {
+		$('#lopcionUsuarios').hide();
+	}
+	if (Authorize(userprofile,[ccAdminProfMsc,ccConfiProfMsc])==false) {
+		$('#lopcionTabla').hide();
+	}					
+	if (Authorize(userprofile,[ccAdminProfMsc,ccConfiProfMsc,ccLoadcProfMsc])==true) {
+		$('.New').removeClass('NotAllowedTd');
+		$('.New *:first-child').removeClass('NotAllowedBtn');
+	}
+	/** 20170512 AGL. OCULTAR BOTONES COPIA / IMPORT / EXPORT */
+	$('#BtnCopyCfg').hide();		// Copia Configuracion
+	$('#BtnCopySite').hide();		// Copia Emplazamiento.
+	$('#BtnImport').hide();			// Boton IMPORT.
+	$('#ExportGateway').hide();		// Boton EXPORT.
+}
+function LogoutUser() {
+	$(location).attr('href', '/logout');
+}
+
 /************************************************** */
 /** 201705 AGL Control DEBUG */
 var DEBUG = true;
@@ -61,7 +142,6 @@ function SetCookie(name, value){
 	  checkCookie=true;
 	}
 }
-
 function ResetAfterImport(datos){
 	var data = JSON.parse(datos);
 
@@ -146,7 +226,8 @@ function myEncode(e){
 						alertify.alert('Ulises G 5000 R', 'Error user login.' + textStatus + '.' + errorThrown);
 						alertify.error('Error user login.' + textStatus + '.' + errorThrown);
 					},
-			success: function(usuario){
+			success: function(usuario)
+			{
 					if (usuario === "User not found."){
 						$('#LoginIncorrect').show();
 						GenerateHistoricEvent(ID_HW,ACCESS_SYSTEM_FAIL,$('#Operador').val());

@@ -2,50 +2,21 @@ extends layout
 
 block content
 
-	script(type='text/javascript' src='/javascripts/jquery-1.11.2.min.js')
-	script(type='text/javascript' src='/translator/lang.js')
-	script(type='text/javascript' src='/javascripts/users.js')
-	script(type='text/javascript' src='/javascripts/gateways.js')
-	script(type='text/javascript' src='/javascripts/configurations.js')
-	script(type='text/javascript' src='/javascripts/hardware.js')
-	script(type='text/javascript' src='/javascripts/parametersRadio.js')
-	script(type='text/javascript' src='/javascripts/parametersTel.js')
-	script(type='text/javascript' src='/javascripts/sites.js')
-	script(type='text/javascript' src='/javascripts/radioDestinations.js')
-	script(type='text/javascript' src='/javascripts/index.js')
-	script(type='text/javascript' src='/alertifyjs/alertify.min.js')
-	link(rel="stylesheet", href="/alertifyjs/css/alertify.min.css")
-	link(rel="stylesheet", href="/alertifyjs/css/themes/semantic.css")
-
 	script.
-		alertify.defaults.transition = 'fade';
+		// Variable parseadas por el servidor.
+		var username = '#{user.name}';
+		var userprofile = '#{user.perfil}';
+		var region = '#{Region}';
+		var urlbackupservice = '#{BackupServiceDomain}';
+		var LoginTimeout = '#{LoginTimeout}';
+		var version = '#{Version}';
+		$(document).ready(function(){
+			// Localizacion de las variables parseadas.
+			$('#BodyRedan').data('perfil', userprofile);
+			$('#BodyRedan').data('urlbackupservice', urlbackupservice);
+			$('#BodyRedan').data('region',region);
+			$('#BodyRedan').data('LoginTimeout',LoginTimeout);
+			$('#BodyRedan').data('version',version);
 
-	form(id="Login-Operador", style='position: absolute;padding: 175px;width: 25%;left: 25%;',  data-LoginTimeout=LoginTimeout, data-perfil=0, data-region=Region, data-urlbackupservice=BackupServiceDomain, data-version=Version)
-		#agrupar.divNucleo
-			section#_ppal1
-				h3(style='margin-top: 0px' tkey='AccessControl')
-				section#_contenido_
-					table(style='width:100%')
-						tr(align='center')
-							td
-								label.labelNucleo(tkey='User')
-							td
-								input(type="text", class="textbox", id="Operador", name="name", placeholder="Nombre del operador", style="width: 100px" autofocus)
-						tr(align='center')
-							td
-								label.labelNucleo(tkey='Key') 
-							td
-								input(type="password", class="textbox", id="TextClave", placeholder="Clave", style='width: 100px')
-						tr(align='center')
-							td
-								label.labelNucleo#LoginIncorrect(style='display:none' tkey='BadLogin')
-								label.labelNucleo#AlreadyLogin(style='display:none' tkey='AlreadyLogin')
-								label.labelNucleo#UserAlreadyLogin(style='display:none' tkey='UserAlreadyLogin')
-						tr(align='center')
-							td(colspan=2)
-								div(style='padding-top:1.5em')
-									input.ButtonNucleo(type="submit", value="Login", onclick="myEncode(event)")
-					input(type="hidden", name="clave", id='Clave')
-//	
-	include ./services/components.jade
-
+			indexInitUserData(username, userprofile);
+			});
