@@ -1,0 +1,124 @@
+block versions
+
+    script(type='text/javascript' src="/moment.js")
+    script.
+        /** */
+        var dateFormat = "YYYY-MM-DDTHH:mm";
+        var strStartDate, strEndDate;
+        var intervalTimer;
+        var histTable = [];
+        /** */
+        function datesInit() {
+            strStartDate = moment().startOf('month').format(dateFormat);
+            strEndDate = moment().startOf('minute').format(dateFormat);
+
+            document.getElementById("StatsDateStart").value = strStartDate;
+            document.getElementById("StatsDateEn").value = strEndDate;
+        }
+        /** */
+        function OneSecondTick(){
+            if ($('#FormStats').is(':visible')==false)
+                datesInit();
+            if (histTable.length==0) {
+                    $('#StatsExportBt').hide();
+                }
+            else {
+                    $('#StatsExportBt').show();
+                    $("#StatsExportBt").html('Exportar ' + histTable.length + ' Registros a CSV');
+                }
+        }
+        /** */
+        function OnClickBuscar() {
+            strStartDate = document.getElementById("StatsDateStart").value;
+            strEndDate = document.getElementById("StatsDateEn").value;
+            
+            var url = '/historics/statisticset/'+ strStartDate + '/' + strEndDate;
+            $.get(url, {}, function(data,status,xhr) {
+                if (status=='success') {
+                        console.log(data);
+                        histTable = data.historics;
+                    }
+                else {
+                    alert("error: " + status);
+                    }
+            },"json");
+        }
+        /** */
+        function cvsField(entry) {
+            if (entry===undefined || entry === null)
+                return "undefined;";
+            return entry.toString().replace(/(?:\r\n|\r|\n)/g, '') + ";";
+        }
+        /** */
+        function alarmaToString(alarma, tipo) {
+            if (alarma===0)
+                return "Evento;;";
+            if (alarma===1) {
+                strTipo = tipo===0 ? "No Urgente" : tipo===1 ? "Urgente" : tipo===2 ? "Critica" : "undefined";
+                return "Alarma;"+strTipo+";";
+            }
+            return "undefined;undefined;";
+        }
+        /** */
+        function OnClickExportar() {
+            if (!histTable || histTable.length==0) return;
+            var strInicio = moment(strStartDate).format('DD/MM/YYYY HH:mm:ss');
+            var strFinal = moment(strEndDate).format('DD/MM/YYYY HH:mm:ss');
+            var csvData = "Inicio;" +
+                          "Final;" +
+                          "FechaHora;" +
+                          "Reconocida;" +
+                          "Usuario;" +
+                          "IdIncidencia;" +
+                          "IdHw;" + 
+                          "TipoHw;" + 
+                          "Descripcion;" +
+                          "Alarma;" +
+                          "TipoAlarma\r\n";
+            $.each(histTable, function(index, reg) {
+                var item =  cvsField(strInicio) +
+                            cvsField(strFinal) +
+                            cvsField(reg.FechaHora) +
+                            cvsField(reg.Reconocida) +
+                            cvsField(reg.Usuario) +
+                            cvsField(reg.IdIncidencia) +
+                            cvsField(reg.IdHw) +
+                            cvsField(reg.TipoHw) +
+                            cvsField(reg.Descripcion) +
+                            cvsField(alarmaToString(reg.Alarma, reg.TipoAlarma)) + 
+                            "\r\n";
+                csvData += item;
+            });
+            var myLink=document.createElement('a');
+            myLink.download = strStartDate + '_' + strEndDate + '_stats.csv';
+            myLink.href = "data:application/csv," + escape(csvData);
+            myLink.click();
+
+            histTable = [];     
+        }
+        /** */
+        $(document).ready(function() {
+            intervalTimer = setInterval(OneSecondTick, 1000);
+        });
+
+
+    div#FormStats(style="display: none; width: 550px")
+        div.menu.fadeNucleo#DivStats(style='position:relative; display:yes')
+            h3 Estadísticas
+            table(style='table-layout:fixed width: 100%')
+                tr
+                    td(style='width: 50%') Fecha de Inicio
+                    td(style='width: 50%') Fecha de Fin
+                tr
+                    td
+                        input#StatsDateStart(type='datetime-local' value='')
+                    td
+                        input#StatsDateEn(type='datetime-local' value='')
+                tr
+                tr
+                    td
+                        a.ButtonNucleo(onclick='OnClickBuscar()') Buscar
+                    td
+                        a.ButtonNucleo#StatsExportBt(onclick='OnClickExportar()') Exportar a Excel
+
+

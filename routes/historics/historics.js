@@ -217,5 +217,13 @@ router.route('/tasaEventosFallos/event/:idEvent/:dateIni/:dateFin')
 	  		res.json(h);
   		});
 	});
+/** 20170525 AGL Para los registros de las nuevas estadisticas */
+router.route('/statisticset/:dateIni/:dateFin')
+	.get(function(req, res) {
+		logging.LoggingDate(req.method + ': ' + req.baseUrl + req.url);
+  		myLibHistorics.getStatisticsSet(req.params.dateIni, req.params.dateFin, function(h) {
+	  		res.json(h);
+  		});
+	});
 
 module.exports = router;

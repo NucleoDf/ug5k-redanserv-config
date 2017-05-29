@@ -30,6 +30,7 @@
 	"dbuser" : "root",
 	"dbpassword" : "cd40",
 	"dbdatabase" : "ug5k",
+  "dbstatreglimit": 10000,
 	"log2file" : true,
 	"logfile_path": "./logs/ug5kserv.log",
 	"logfile_maxfiles": 4,

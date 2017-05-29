@@ -303,6 +303,11 @@ html
 				alertify.alert("Informacion", "Para Restaurar la Base de Datos, consultar 'ULISES G 5000-REDAN. Configuracion Remota. Manual de Usuario.docx' Punto 6.2.");
 			}
 
+			function statsShow() {
+				$('#FormStats').show();
+				$('#DivStats').animate({width: '435px'});
+			}
+
 		table(style='width:100%')
 			tr
 				td(style='width:15%')
@@ -400,8 +405,11 @@ html
 								ul.menuList#MaintenanceOptionsList(style='height:15%')
 									li
 										a(id="opcionHistoric" onclick="showMaintenancePanel('Maintenance')" tkey='Historics')
-									li
-										a(id="opcionEstadi" onclick="showMaintenancePanel('Estadisticas')" tkey='Statistic')
+									// AGL. NUEVAS ESTADISTICAS
+									//- li
+									//- 	a(id="opcionEstadi" onclick="showMaintenancePanel('Estadisticas')" tkey='Statistic')
+									li(id="lopcionStats")
+										a(id="opcionStats" onclick="CheckingAnyChange(\'GeneralContent\', function(){hidePreviousHistorics(\'#FormStats\',\'#FormStats\',\'#DivStats\'); statsShow()})") Estadisticas
 									//li
 									//	a(id="opcionPasarel" onclick="showMaintenancePanel('Pasarelas')" tkey='Gateways')
 									// AGL. FORM VERSION.
@@ -416,6 +424,9 @@ html
 							// AGL. FORM VERSION
 							block version
 							include ./version/version.jade
+							// AGL. NEW STATS
+							block stats
+							include ./historics/statistics.jade
 					tr(style='vertical-align:top')
 						td#MenuFiltros(style='display:table-column')
 							nav.menu(style='height:330px')
